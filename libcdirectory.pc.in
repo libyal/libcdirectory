@@ -1,0 +1,12 @@
+prefix=@prefix@
+exec_prefix=@exec_prefix@
+libdir=@libdir@
+includedir=@includedir@
+
+Name: libuna
+Description: Library to support cross-platform C directory functions
+Version: @VERSION@
+Libs: -L${libdir} -lcdirectory
+Libs.private: @ax_libcerror_pc_libs_private@ @ax_libclocale_pc_libs_private@ @ax_libcstring_pc_libs_private@ @ax_libuna_pc_libs_private@
+Cflags: -I${includedir}
+

@@ -1,0 +1,61 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libclocale", "libclocale\libclocale.vcproj", "{D912B2AE-867E-4908-BF1C-4313D32C3FCC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B843A08D-8433-4616-BA2C-C65A08143623} = {B843A08D-8433-4616-BA2C-C65A08143623}
+		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcstring", "libcstring\libcstring.vcproj", "{B843A08D-8433-4616-BA2C-C65A08143623}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libuna", "libuna\libuna.vcproj", "{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B843A08D-8433-4616-BA2C-C65A08143623} = {B843A08D-8433-4616-BA2C-C65A08143623}
+		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcerror", "libcerror\libcerror.vcproj", "{9603DA60-ECBF-4438-B500-CFC15A151F50}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B843A08D-8433-4616-BA2C-C65A08143623} = {B843A08D-8433-4616-BA2C-C65A08143623}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libcdirectory", "libcdirectory\libcdirectory.vcproj", "{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B843A08D-8433-4616-BA2C-C65A08143623} = {B843A08D-8433-4616-BA2C-C65A08143623}
+		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC} = {D912B2AE-867E-4908-BF1C-4313D32C3FCC}
+		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8} = {A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Release|Win32 = Release|Win32
+		VSDebug|Win32 = VSDebug|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.ActiveCfg = Release|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.Build.0 = Release|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.Build.0 = VSDebug|Win32
+		{B843A08D-8433-4616-BA2C-C65A08143623}.Release|Win32.ActiveCfg = Release|Win32
+		{B843A08D-8433-4616-BA2C-C65A08143623}.Release|Win32.Build.0 = Release|Win32
+		{B843A08D-8433-4616-BA2C-C65A08143623}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{B843A08D-8433-4616-BA2C-C65A08143623}.VSDebug|Win32.Build.0 = VSDebug|Win32
+		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.Release|Win32.ActiveCfg = Release|Win32
+		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.Release|Win32.Build.0 = Release|Win32
+		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.VSDebug|Win32.Build.0 = VSDebug|Win32
+		{9603DA60-ECBF-4438-B500-CFC15A151F50}.Release|Win32.ActiveCfg = Release|Win32
+		{9603DA60-ECBF-4438-B500-CFC15A151F50}.Release|Win32.Build.0 = Release|Win32
+		{9603DA60-ECBF-4438-B500-CFC15A151F50}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{9603DA60-ECBF-4438-B500-CFC15A151F50}.VSDebug|Win32.Build.0 = VSDebug|Win32
+		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}.Release|Win32.ActiveCfg = Release|Win32
+		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}.Release|Win32.Build.0 = Release|Win32
+		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}.VSDebug|Win32.Build.0 = VSDebug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

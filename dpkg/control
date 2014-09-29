@@ -1,0 +1,30 @@
+Source: libcdirectory
+Section: unknown
+Priority: extra
+Maintainer: Joachim Metz <joachim.metz@gmail.com>
+Build-Depends: debhelper (>= 7), autotools-dev
+Standards-Version: 3.8.3
+Homepage: https://github.com/libyal/libcdirectory/
+
+Package: libcdirectory
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Suggests: libcdirectory-dbg
+Description: Library to support cross-platform C directory functions
+ libcdirectory is a library to support cross-platform C directory functions.
+
+Package: libcdirectory-dbg
+Architecture: any
+Section: debug
+Depends: libcdirectory (= ${Source-Version}), ${misc:Depends}
+Description: Debugging symbols for libcdirectory
+ Debugging symbols for libcdirectory.
+
+Package: libcdirectory-dev
+Section: libdevel
+Architecture: any
+Depends: libcdirectory (= ${Source-Version})
+Description: Header files and libraries for developing applications for libcdirectory
+ Header files and libraries for developing applications for libcdirectory.
+
