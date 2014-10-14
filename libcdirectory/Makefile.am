@@ -20,7 +20,7 @@ libcdirectory_la_SOURCES = \
 	libcdirectory_libcstring.h \
 	libcdirectory_libuna.h \
 	libcdirectory_support.c libcdirectory_support.h \
-	libcdirectory_types.h
+	libcdirectory_types.h \
 	libcdirectory_unused.h
 
 libcdirectory_la_LIBADD  = \
