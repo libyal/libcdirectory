@@ -1,4 +1,4 @@
-.Dd October 18, 2014
+.Dd January  2, 2015
 .Dt libcdirectory 3
 .Os libcdirectory
 .Sh NAME
@@ -39,9 +39,11 @@ Directory functions
 .Ft int
 .Fn libcdirectory_directory_has_entry "libcdirectory_directory_t *directory, libcdirectory_directory_entry_t *directory_entry, const char *entry_name, size_t entry_name_length, uint8_t entry_type, uint8_t compare_flags, libcdirectory_error_t **error"
 .Pp
-Available when compiled with libbfio support:
+Available when compiled with wide character string support:
 .Ft int
 .Fn libcdirectory_directory_open_wide "libcdirectory_directory_t *directory, const wchar_t *directory_name, libcdirectory_error_t **error"
+.Pp
+Available when compiled with wide character string support:
 .Ft int
 .Fn libcdirectory_directory_has_entry_wide "libcdirectory_directory_t *directory, libcdirectory_directory_entry_t *directory_entry, const wchar_t *entry_name, size_t entry_name_length, uint8_t entry_type, uint8_t compare_flags, libcdirectory_error_t **error"
 .Pp
@@ -55,7 +57,7 @@ Directory entry functions
 .Ft int
 .Fn libcdirectory_directory_entry_get_name "libcdirectory_directory_entry_t *directory_entry, char **name, libcdirectory_error_t **error"
 .Pp
-Available when compiled with libbfio support:
+Available when compiled with wide character string support:
 .Ft int
 .Fn libcdirectory_directory_entry_get_name_wide "libcdirectory_directory_entry_t *directory_entry, wchar_t **name, libcdirectory_error_t **error"
 .Sh DESCRIPTION
@@ -63,18 +65,20 @@ The
 .Fn libcdirectory_get_version
 function is used to retrieve the library version.
 .Sh RETURN VALUES
-Most of the functions return NULL or -1 on error, dependent on the return type. For the actual return values refer to libcdirectory.h
+Most of the functions return NULL or -1 on error, dependent on the return type.
+For the actual return values see "libcdirectory.h".
 .Sh ENVIRONMENT
 None
 .Sh FILES
 None
 .Sh BUGS
-Please report bugs of any kind to <joachim.metz@gmail.com> or on the project website:
-https://github.com/libyal/libcdirectory/
+Please report bugs of any kind on the project issue tracker: https://github.com/libyal/libcdirectory/issues
 .Sh AUTHOR
-These man pages were written by Joachim Metz.
+These man pages are generated from "libcdirectory.h".
 .Sh COPYRIGHT
 Copyright (C) 2008-2015, Joachim Metz <joachim.metz@gmail.com>.
-This is free software; see the source for copying conditions. There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+This is free software; see the source for copying conditions.
+There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 .Sh SEE ALSO
 the libcdirectory.h include file
