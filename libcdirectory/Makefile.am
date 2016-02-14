@@ -23,7 +23,7 @@ libcdirectory_la_SOURCES = \
 	libcdirectory_types.h \
 	libcdirectory_unused.h
 
-libcdirectory_la_LIBADD  = \
+libcdirectory_la_LIBADD = \
 	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
