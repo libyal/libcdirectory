@@ -1,4 +1,5 @@
 MSVSCPP_FILES = \
+	cdirectory_test_get_version/cdirectory_test_get_version.vcproj \
 	libcdirectory/libcdirectory.vcproj \
 	libcerror/libcerror.vcproj \
 	libclocale/libclocale.vcproj \

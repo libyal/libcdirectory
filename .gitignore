@@ -116,6 +116,7 @@ stamp-h[1-9]
 /include/libcdirectory/types.h
 /libcdirectory/libcdirectory.rc
 /libcdirectory/libcdirectory_definitions.h
+/tests/cdirectory_test_get_version
 /tests/tmp*
 
 # Local library dependencies specific files
