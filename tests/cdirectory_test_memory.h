@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _CDIRECTORY_TEST_MALLOC_H )
-#define _CDIRECTORY_TEST_MALLOC_H
+#if !defined( _CDIRECTORY_TEST_MEMORY_H )
+#define _CDIRECTORY_TEST_MEMORY_H
 
 #include <common.h>
 
@@ -30,9 +30,11 @@ extern "C" {
 
 #if defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI )
 
-#define HAVE_CDIRECTORY_TEST_MALLOC		1
+#define HAVE_CDIRECTORY_TEST_MEMORY		1
 
 extern int cdirectory_test_malloc_attempts_before_fail;
+
+extern int cdirectory_test_memset_attempts_before_fail;
 
 extern int cdirectory_test_realloc_attempts_before_fail;
 
@@ -42,5 +44,5 @@ extern int cdirectory_test_realloc_attempts_before_fail;
 }
 #endif
 
-#endif /* !defined( _CDIRECTORY_TEST_MALLOC_H ) */
+#endif /* !defined( _CDIRECTORY_TEST_MEMORY_H ) */
 

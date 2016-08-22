@@ -30,7 +30,7 @@
 #include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_libcstring.h"
 #include "cdirectory_test_macros.h"
-#include "cdirectory_test_malloc.h"
+#include "cdirectory_test_memory.h"
 #include "cdirectory_test_unused.h"
 
 /* Tests the libcdirectory_directory_initialize function
@@ -117,7 +117,7 @@ int cdirectory_test_directory_initialize(
 
 	directory = NULL;
 
-#if defined( HAVE_CDIRECTORY_TEST_MALLOC )
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
 
 	/* Test libcdirectory_directory_initialize with malloc failing
 	 */
@@ -149,7 +149,37 @@ int cdirectory_test_directory_initialize(
 		libcerror_error_free(
 		 &error );
 	}
-#endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
+	/* Test libcdirectory_directory_initialize with memset failing
+	 */
+	cdirectory_test_memset_attempts_before_fail = 0;
+
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	if( cdirectory_test_memset_attempts_before_fail != -1 )
+	{
+		cdirectory_test_memset_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL(
+		 "result",
+		 result,
+		 -1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "directory",
+		 directory );
+
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
+
+		libcerror_error_free(
+		 &error );
+	}
+#endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
 
 	return( 1 );
 
@@ -405,7 +435,7 @@ int cdirectory_test_directory_open_wide(
 	libcerror_error_free(
 	 &error );
 
-#if defined( HAVE_CDIRECTORY_TEST_MALLOC )
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
 
 	/* Test libcdirectory_directory_initialize with malloc failing
 	 */
@@ -434,7 +464,7 @@ int cdirectory_test_directory_open_wide(
 		libcerror_error_free(
 		 &error );
 	}
-#endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
+#endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
 
 	/* Clean up
 	 */

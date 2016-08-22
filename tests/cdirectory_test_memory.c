@@ -33,11 +33,13 @@
 
 #if defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI )
 
-static void *(*cdirectory_test_real_malloc)(size_t)             = NULL;
-static void *(*cdirectory_test_real_realloc)(void *ptr, size_t) = NULL;
+static void *(*cdirectory_test_real_malloc)(size_t)              = NULL;
+static void *(*cdirectory_test_real_memset)(void *, int, size_t) = NULL;
+static void *(*cdirectory_test_real_realloc)(void *, size_t)     = NULL;
 
-int cdirectory_test_malloc_attempts_before_fail                 = -1;
-int cdirectory_test_realloc_attempts_before_fail                = -1;
+int cdirectory_test_malloc_attempts_before_fail                  = -1;
+int cdirectory_test_memset_attempts_before_fail                  = -1;
+int cdirectory_test_realloc_attempts_before_fail                 = -1;
 
 /* Custom malloc for testing memory error cases
  * Note this function might fail if compiled with optimation
@@ -46,6 +48,8 @@ int cdirectory_test_realloc_attempts_before_fail                = -1;
 void *malloc(
        size_t size )
 {
+	void *ptr = NULL;
+
 	if( cdirectory_test_real_malloc == NULL )
 	{
 		cdirectory_test_real_malloc = dlsym(
@@ -62,9 +66,43 @@ void *malloc(
 	{
 		cdirectory_test_malloc_attempts_before_fail--;
 	}
-	return(
-	 cdirectory_test_real_malloc(
-	  size ) );
+	ptr = cdirectory_test_real_malloc(
+	       size );
+
+	return( ptr );
+}
+
+/* Custom memset for testing memory error cases
+ * Note this function might fail if compiled with optimation and as a shared libary
+ * Returns a pointer to newly allocated data or NULL
+ */
+void *memset(
+       void *ptr,
+       int constant,
+       size_t size )
+{
+	if( cdirectory_test_real_memset == NULL )
+	{
+		cdirectory_test_real_memset = dlsym(
+		                               RTLD_NEXT,
+		                               "memset" );
+	}
+	if( cdirectory_test_memset_attempts_before_fail == 0 )
+	{
+		cdirectory_test_memset_attempts_before_fail = -1;
+
+		return( NULL );
+	}
+	else if( cdirectory_test_memset_attempts_before_fail > 0 )
+	{
+		cdirectory_test_memset_attempts_before_fail--;
+	}
+	ptr = cdirectory_test_real_memset(
+	       ptr,
+	       constant,
+	       size );
+
+	return( ptr );
 }
 
 /* Custom realloc for testing memory error cases
@@ -91,10 +129,11 @@ void *realloc(
 	{
 		cdirectory_test_realloc_attempts_before_fail--;
 	}
-	return(
-	 cdirectory_test_real_realloc(
-	  ptr,
-	  size ) );
+	ptr = cdirectory_test_real_realloc(
+	       ptr,
+	       size );
+
+	return( ptr );
 }
 
 #endif /* defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI ) */

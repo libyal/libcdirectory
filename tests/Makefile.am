@@ -29,7 +29,7 @@ cdirectory_test_directory_SOURCES = \
 	cdirectory_test_libcerror.h \
 	cdirectory_test_libcstring.h \
 	cdirectory_test_macros.h \
-	cdirectory_test_malloc.c cdirectory_test_malloc.h \
+	cdirectory_test_memory.c cdirectory_test_memory.h \
 	cdirectory_test_unused.h
 
 cdirectory_test_directory_LDADD = \
@@ -43,7 +43,7 @@ cdirectory_test_directory_entry_SOURCES = \
 	cdirectory_test_libcerror.h \
 	cdirectory_test_libcstring.h \
 	cdirectory_test_macros.h \
-	cdirectory_test_malloc.c cdirectory_test_malloc.h \
+	cdirectory_test_memory.c cdirectory_test_memory.h \
 	cdirectory_test_unused.h
 
 cdirectory_test_directory_entry_LDADD = \

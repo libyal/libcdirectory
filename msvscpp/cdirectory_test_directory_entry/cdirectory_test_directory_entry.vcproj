@@ -180,7 +180,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\tests\cdirectory_test_malloc.c"
+				RelativePath="..\..\tests\cdirectory_test_memory.c"
 				>
 			</File>
 		</Filter>
@@ -206,7 +206,7 @@
 				>
 			</File>
 			<File
-				RelativePath="..\..\tests\cdirectory_test_malloc.h"
+				RelativePath="..\..\tests\cdirectory_test_memory.h"
 				>
 			</File>
 			<File

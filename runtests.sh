@@ -115,7 +115,7 @@ run_setup_py_tests()
 export CFLAGS="--coverage -O0";
 export LDFLAGS="--coverage";
 
-run_configure_make_check;
+run_configure_make_check --enable-shared=no;
 RESULT=$?;
 
 export CFLAGS=;

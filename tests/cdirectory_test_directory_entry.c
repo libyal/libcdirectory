@@ -30,7 +30,7 @@
 #include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_libcstring.h"
 #include "cdirectory_test_macros.h"
-#include "cdirectory_test_malloc.h"
+#include "cdirectory_test_memory.h"
 #include "cdirectory_test_unused.h"
 
 /* Tests the libcdirectory_directory_entry_initialize function
@@ -117,7 +117,7 @@ int cdirectory_test_directory_entry_initialize(
 
 	directory_entry = NULL;
 
-#if defined( HAVE_CDIRECTORY_TEST_MALLOC )
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
 
 	/* Test libcdirectory_directory_entry_initialize with malloc failing
 	 */
@@ -149,7 +149,7 @@ int cdirectory_test_directory_entry_initialize(
 		libcerror_error_free(
 		 &error );
 	}
-#endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
+#endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
 
 	return( 1 );
 
