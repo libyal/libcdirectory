@@ -145,30 +145,6 @@ int cdirectory_test_directory_entry_initialize(
 	libcerror_error_free(
 	 &error );
 
-	cdirectory_test_malloc_attempts_before_fail = 1;
-
-	result = libcdirectory_directory_entry_initialize(
-	          &directory_entry,
-	          &error );
-
-	cdirectory_test_malloc_attempts_before_fail = -1;
-
-	CDIRECTORY_TEST_ASSERT_EQUAL(
-	 "result",
-	 result,
-	 -1 );
-
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "directory_entry",
-         directory_entry );
-
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
-
-	libcerror_error_free(
-	 &error );
-
 #endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
 
 	return( 1 );

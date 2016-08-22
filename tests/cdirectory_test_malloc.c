@@ -53,6 +53,8 @@ void *malloc(
 	}
 	if( cdirectory_test_malloc_attempts_before_fail == 0 )
 	{
+		cdirectory_test_malloc_attempts_before_fail = -1;
+
 		return( NULL );
 	}
 	if( cdirectory_test_malloc_attempts_before_fail > 0 )
@@ -79,6 +81,8 @@ void *realloc(
 	}
 	if( cdirectory_test_realloc_attempts_before_fail == 0 )
 	{
+		cdirectory_test_realloc_attempts_before_fail = -1;
+
 		return( NULL );
 	}
 	if( cdirectory_test_realloc_attempts_before_fail > 0 )
