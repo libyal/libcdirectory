@@ -52,37 +52,10 @@ extern "C" {
 
 typedef struct libcdirectory_internal_directory_entry libcdirectory_internal_directory_entry_t;
 
-#if defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI )
 struct libcdirectory_internal_directory_entry
 {
 	WIN32_FIND_DATA find_data;
-
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-	char *narrow_name;
-#else
-	wchar_t *wide_name;
-#endif
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
-};
-
-#elif defined( WINAPI )
-struct libcdirectory_internal_directory_entry
-{
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-	struct _wffblk find_data;
-#else
-	struct _wfinddata_t find_data;
-#endif
-
-#else
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-	struct ffblk find_data;
-#else
-	struct _finddata_t find_data;
-#endif
-#endif
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )

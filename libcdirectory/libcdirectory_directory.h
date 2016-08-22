@@ -41,27 +41,10 @@ extern "C" {
 
 typedef struct libcdirectory_internal_directory libcdirectory_internal_directory_t;
 
-#if defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI )
 struct libcdirectory_internal_directory
 {
 	HANDLE handle;
-
-	libcdirectory_directory_entry_t *first_entry;
-};
-
-#elif defined( WINAPI ) && defined( USE_CRT_FUNCTIONS )
-struct libcdirectory_internal_directory
-{
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-	int handle;
-
-#elif defined( __BORLANDC__ )
-	long handle;
-
-#else
-	intptr_t handle;
-
-#endif
 
 	libcdirectory_directory_entry_t *first_entry;
 };

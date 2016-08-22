@@ -127,24 +127,28 @@ int cdirectory_test_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
 
-	cdirectory_test_malloc_attempts_before_fail = -1;
+	if( cdirectory_test_malloc_attempts_before_fail != -1 )
+	{
+		cdirectory_test_malloc_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL(
+		 "result",
+		 result,
+		 -1 );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
-	 "result",
-	 result,
-	 -1 );
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "directory_entry",
+		 directory_entry );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "directory_entry",
-         directory_entry );
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
-
-	libcerror_error_free(
-	 &error );
-
+		libcerror_error_free(
+		 &error );
+	}
 #endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
 
 	return( 1 );
@@ -205,9 +209,13 @@ on_error:
 /* The main program
  */
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain( int argc, wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
+int wmain(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #else
-int main( int argc, char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
+int main(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #endif
 {
 	CDIRECTORY_TEST_UNREFERENCED_PARAMETER( argc )

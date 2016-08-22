@@ -127,24 +127,28 @@ int cdirectory_test_directory_initialize(
 	          &directory,
 	          &error );
 
-	cdirectory_test_malloc_attempts_before_fail = -1;
+	if( cdirectory_test_malloc_attempts_before_fail != -1 )
+	{
+		cdirectory_test_malloc_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL(
+		 "result",
+		 result,
+		 -1 );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
-	 "result",
-	 result,
-	 -1 );
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "directory",
+		 directory );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "directory",
-         directory );
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
-
-	libcerror_error_free(
-	 &error );
-
+		libcerror_error_free(
+		 &error );
+	}
 #endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
 
 	return( 1 );
@@ -332,7 +336,7 @@ int cdirectory_test_directory_open_wide(
 
 	/* Test open of directory
 	 */
-	result = libcdirectory_directory_open(
+	result = libcdirectory_directory_open_wide(
 	          directory,
 	          L".",
 	          &error );
@@ -348,7 +352,7 @@ int cdirectory_test_directory_open_wide(
 
 	/* Test open of file
 	 */
-	result = libcdirectory_directory_open(
+	result = libcdirectory_directory_open_wide(
 	          directory,
 	          L"Makefile.am",
 	          &error );
@@ -367,7 +371,7 @@ int cdirectory_test_directory_open_wide(
 
 	/* Test error cases
 	 */
-	result = libcdirectory_directory_open(
+	result = libcdirectory_directory_open_wide(
 	          NULL,
 	          L".",
 	          &error );
@@ -384,7 +388,7 @@ int cdirectory_test_directory_open_wide(
 	libcerror_error_free(
 	 &error );
 
-	result = libcdirectory_directory_open(
+	result = libcdirectory_directory_open_wide(
 	          directory,
 	          NULL,
 	          &error );
@@ -407,25 +411,29 @@ int cdirectory_test_directory_open_wide(
 	 */
 	cdirectory_test_malloc_attempts_before_fail = 0;
 
-	result = libcdirectory_directory_open(
+	result = libcdirectory_directory_open_wide(
 	          directory,
 	          L".",
 	          &error );
 
-	cdirectory_test_malloc_attempts_before_fail = -1;
+	if( cdirectory_test_malloc_attempts_before_fail != -1 )
+	{
+		cdirectory_test_malloc_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL(
+		 "result",
+		 result,
+		 -1 );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
-	 "result",
-	 result,
-	 -1 );
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
-
-	libcerror_error_free(
-	 &error );
-
+		libcerror_error_free(
+		 &error );
+	}
 #endif /* defined( HAVE_CDIRECTORY_TEST_MALLOC ) */
 
 	/* Clean up
@@ -601,12 +609,91 @@ on_error:
 	return( 0 );
 }
 
+#if defined( HAVE_WIDE_CHARACTER_TYPE )
+
+/* Tests the libcdirectory_directory_has_entry_wide function
+ * Returns 1 if successful or 0 if not
+ */
+int cdirectory_test_directory_has_entry_wide(
+     void )
+{
+	libcdirectory_directory_t *directory             = NULL;
+	libcdirectory_directory_entry_t *directory_entry = NULL;
+	libcerror_error_t *error                         = NULL;
+	int result                                       = 0;
+
+	/* Initialize test
+	 */
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	result = libcdirectory_directory_open_wide(
+	          directory,
+	          L".",
+	          &error );
+
+	/* Test has entry
+	 */
+
+	/* Test error cases
+	 */
+	result = libcdirectory_directory_has_entry_wide(
+	          NULL,
+	          directory_entry,
+	          NULL,
+	          0,
+	          0,
+	          0,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 -1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+         "error",
+         error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Clean up
+	 */
+	result = libcdirectory_directory_free(
+	          &directory,
+	          NULL );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
+		 NULL );
+	}
+	return( 0 );
+}
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
+
 /* The main program
  */
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain( int argc, wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
+int wmain(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #else
-int main( int argc, char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
+int main(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #endif
 {
 	CDIRECTORY_TEST_UNREFERENCED_PARAMETER( argc )

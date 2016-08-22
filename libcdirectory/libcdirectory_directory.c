@@ -113,11 +113,10 @@ int libcdirectory_directory_initialize(
 
 		goto on_error;
 	}
-#if defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI )
 	internal_directory->handle = INVALID_HANDLE_VALUE;
-#elif defined( WINAPI )
-	internal_directory->handle = -1;
 #endif
+
 	*directory = (libcdirectory_directory_t *) internal_directory;
 
 	return( 1 );
@@ -157,10 +156,8 @@ int libcdirectory_directory_free(
 	{
 		internal_directory = (libcdirectory_internal_directory_t *) *directory;
 	
-#if defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI )
 		if( internal_directory->handle != INVALID_HANDLE_VALUE )
-#elif defined( WINAPI )
-		if( internal_directory->handle != -1 )
 #else
 		if( internal_directory->stream != NULL )
 #endif
@@ -187,7 +184,7 @@ int libcdirectory_directory_free(
 	return( result );
 }
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI ) && ( WINVER >= 0x0501 )
 
 /* Opens a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -529,188 +526,10 @@ on_error:
 	return( -1 );
 }
 
-#elif defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#elif defined( WINAPI )
 
 /* TODO */
 #error WINAPI open directory for Windows 2000 or earlier NOT implemented yet
-
-#elif defined( WINAPI ) && defined( USE_CRT_FUNCTIONS )
-
-/* Opens a directory
- * This function uses the Visual Studio C runtime library function or equivalent
- * Returns 1 if successful or -1 on error
- */
-int libcdirectory_directory_open(
-     libcdirectory_directory_t *directory,
-     const char *directory_name,
-     libcerror_error_t **error )
-{
-	libcdirectory_internal_directory_t *internal_directory                   = NULL;
-	libcdirectory_internal_directory_entry_t *internal_first_directory_entry = NULL;
-	static char *function                                                    = "libcdirectory_directory_open";
-	char *narrow_directory_name                                              = NULL;
-	size_t directory_name_size                                               = 0;
-	size_t narrow_directory_name_size                                        = 0;
-
-	if( directory == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory.",
-		 function );
-
-		return( -1 );
-	}
-	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
-	if( directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory name.",
-		 function );
-
-		return( -1 );
-	}
-	if( internal_directory->handle != -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - handle value already set.",
-		 function );
-
-		return( -1 );
-	}
-	if( internal_directory->first_entry != NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - first entry value already set.",
-		 function );
-
-		return( -1 );
-	}
-	if( libcdirectory_directory_entry_initialize(
-	     &( internal_directory->first_entry ),
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-		 "%s: unable to create first entry.",
-		 function );
-
-		goto on_error;
-	}
-	if( internal_directory->first_entry == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-		 "%s: invalid directory - missing first entry.",
-		 function );
-
-		goto on_error;
-	}
-	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
-
-	directory_name_size = 1 + libcstring_narrow_string_length(
-	                           directory_name );
-
-	narrow_directory_name_size = directory_name_size;
-
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] == '\\' )
-	{
-		narrow_directory_name_size += 1;
-	}
-	narrow_directory_name_size += 1;
-
-	narrow_directory_name = libcstring_wide_string_allocate(
-	                         narrow_directory_name_size );
-
-	if( narrow_directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create narrow character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	if( libcstring_narrow_string_copy(
-	     narrow_directory_name,
-	     directory_name,
-	     directory_name_size ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory name.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] != '\\' )
-	{
-		narrow_directory_name[ narrow_directory_name_size - 3 ] = (char) '\\';
-	}
-	narrow_directory_name[ narrow_directory_name_size - 2 ] = (char) '*';
-	narrow_directory_name[ narrow_directory_name_size - 1 ] = 0;
-
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-	internal_directory->handle = findfirst(
-	                              narrow_directory_name,
-	                              &( internal_first_directory_entry->find_data ),
-	                              0 );
-#else
-	internal_directory->handle = _findfirst(
-	                              narrow_directory_name,
-	                              &( internal_first_directory_entry->find_data ) );
-#endif
-	if( internal_directory->handle == -1 )
-	{
-		libcerror_system_set_error(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_OPEN_FAILED,
-		 errno,
-		 "%s: unable to open directory.",
-		 function );
-
-		goto on_error;
-	}
-	memory_free(
-	 narrow_directory_name );
-
-	narrow_directory_name = NULL;
-
-	return( 1 );
-
-on_error:
-	if( narrow_directory_name != NULL )
-	{
-		memory_free(
-		 narrow_directory_name );
-	}
-	return( -1 );
-}
 
 #elif defined( HAVE_OPENDIR )
 
@@ -785,7 +604,7 @@ int libcdirectory_directory_open(
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI ) && ( WINVER >= 0x0501 )
 
 /* Opens a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -1127,192 +946,10 @@ on_error:
 	return( -1 );
 }
 
-#elif defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#elif defined( WINAPI )
 
 /* TODO */
 #error WINAPI open directory for Windows 2000 or earlier NOT implemented yet
-
-#elif defined( WINAPI ) && defined( USE_CRT_FUNCTIONS )
-
-/* Opens a directory
- * This function uses the Visual Studio C runtime library function or equivalent
- * Returns 1 if successful or -1 on error
- */
-int libcdirectory_directory_open_wide(
-     libcdirectory_directory_t *directory,
-     const wchar_t *directory_name,
-     libcerror_error_t **error )
-{
-	libcdirectory_internal_directory_t *internal_directory                   = NULL;
-	libcdirectory_internal_directory_entry_t *internal_first_directory_entry = NULL;
-	static char *function                                                    = "libcdirectory_directory_open_wide";
-	wchar_t *wide_directory_name                                             = NULL;
-	size_t directory_name_size                                               = 0;
-	size_t wide_directory_name_size                                          = 0;
-
-	if( directory == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory.",
-		 function );
-
-		return( -1 );
-	}
-	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
-	if( directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory name.",
-		 function );
-
-		return( -1 );
-	}
-	if( internal_directory->handle != -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - handle value already set.",
-		 function );
-
-		return( -1 );
-	}
-	if( internal_directory->first_entry != NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - first entry value already set.",
-		 function );
-
-		return( -1 );
-	}
-	if( libcdirectory_directory_entry_initialize(
-	     &( internal_directory->first_entry ),
-	     error ) != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_INITIALIZE_FAILED,
-		 "%s: unable to create first entry.",
-		 function );
-
-		goto on_error;
-	}
-	if( internal_directory->first_entry == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
-		 "%s: invalid directory - missing first entry.",
-		 function );
-
-		goto on_error;
-	}
-	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
-
-	directory_name_size = 1 + libcstring_wide_string_length(
-	                           directory_name );
-
-	wide_directory_name_size = directory_name_size;
-
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] == '\\' )
-	{
-		wide_directory_name_size += 1;
-	}
-	wide_directory_name_size += 1;
-
-	wide_directory_name = libcstring_wide_string_allocate(
-	                       wide_directory_name_size );
-
-	if( wide_directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create wide character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	if( libcstring_wide_string_copy(
-	     wide_directory_name,
-	     directory_name,
-	     directory_name_size ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory name.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] != (wchar_t) '\\' )
-	{
-		wide_directory_name[ wide_directory_name_size - 3 ] = (wchar_t) '\\';
-	}
-	wide_directory_name[ wide_directory_name_size - 2 ] = (wchar_t) '*';
-	wide_directory_name[ wide_directory_name_size - 1 ] = 0;
-
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-	internal_directory->handle = _wfindfirst(
-	                              wide_directory_name,
-	                              &( internal_first_directory_entry->find_data ),
-	                              0 );
-#elif defined( __BORLANDC__ )
-	internal_directory->handle = __wfindfirst(
-	                              wide_directory_name,
-	                              &( internal_first_directory_entry->find_data ) );
-#else
-	internal_directory->handle = _wfindfirst(
-	                              wide_directory_name,
-	                              &( internal_first_directory_entry->find_data ) );
-#endif
-	if( internal_directory->handle == -1 )
-	{
-		libcerror_system_set_error(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_OPEN_FAILED,
-		 errno,
-		 "%s: unable to open directory.",
-		 function );
-
-		goto on_error;
-	}
-	memory_free(
-	 wide_directory_name );
-
-	wide_directory_name = NULL;
-
-	return( 1 );
-
-on_error:
-	if( wide_directory_name != NULL )
-	{
-		memory_free(
-		 wide_directory_name );
-	}
-	return( -1 );
-}
 
 #elif defined( HAVE_OPENDIR )
 
@@ -1523,7 +1160,7 @@ on_error:
 
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI ) && ( WINVER >= 0x0501 )
 
 /* Closes a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -1589,78 +1226,10 @@ int libcdirectory_directory_close(
 	return( result );
 }
 
-#elif defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#elif defined( WINAPI )
 
 /* TODO */
 #error WINAPI close directory for Windows 2000 or earlier NOT implemented yet
-
-#elif defined( WINAPI ) && defined( USE_CRT_FUNCTIONS )
-
-/* Closes a directory
- * This function uses the Visual Studio C runtime library function or equivalent
- * Returns 0 if successful or -1 on error
- */
-int libcdirectory_directory_close(
-     libcdirectory_directory_t *directory,
-     libcerror_error_t **error )
-{
-	libcdirectory_internal_directory_t *internal_directory = NULL;
-	static char *function                                  = "libcdirectory_directory_close";
-	int result                                             = 0;
-
-	if( directory == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory.",
-		 function );
-
-		return( -1 );
-	}
-	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
-	if( internal_directory->handle != -1 )
-	{
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-		if( findclose(
-		     internal_directory->handle ) != 0 )
-#else
-		if( _findclose(
-		     internal_directory->handle ) != 0 )
-#endif
-		{
-			libcerror_system_set_error(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_IO,
-			 LIBCERROR_IO_ERROR_CLOSE_FAILED,
-			 errno,
-			 "%s: unable to close directory.",
-			 function );
-
-			result = -1;
-		}
-		internal_directory->handle = -1;
-	}
-	if( internal_directory->first_entry != NULL )
-	{
-		if( libcdirectory_directory_entry_free(
-		     &( internal_directory->first_entry ),
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-			 "%s: unable to free first entry.",
-			 function );
-
-			result = -1;
-		}
-	}
-	return( result );
-}
 
 #elif defined( HAVE_CLOSEDIR )
 
@@ -1713,7 +1282,7 @@ int libcdirectory_directory_close(
 #error Missing close directory function
 #endif
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 ) && !defined( USE_CRT_FUNCTIONS )
+#if defined( WINAPI ) && ( WINVER >= 0x0501 )
 
 /* Reads a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -1843,164 +1412,10 @@ int libcdirectory_directory_read_entry(
 	return( 1 );
 }
 
-#elif defined( WINAPI ) && !defined( USE_CRT_FUNCTIONS )
+#elif defined( WINAPI )
 
 /* TODO */
 #error WINAPI read directory entry for Windows 2000 or earlier NOT implemented yet
-
-#elif defined( WINAPI ) && defined( USE_CRT_FUNCTIONS )
-
-/* Reads a directory
- * This function uses the Visual Studio C runtime library function or equivalent
- * Returns 1 if successful, 0 if no such entry or -1 on error
- */
-int libcdirectory_directory_read_entry(
-     libcdirectory_directory_t *directory,
-     libcdirectory_directory_entry_t *directory_entry,
-     libcerror_error_t **error )
-{
-	libcdirectory_internal_directory_t *internal_directory             = NULL;
-	libcdirectory_internal_directory_entry_t *internal_directory_entry = NULL;
-	static char *function                                              = "libcdirectory_directory_read_entry";
-	size_t finddata_size                                               = 0;
-	int result                                                         = 0;
-
-	if( directory == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory.",
-		 function );
-
-		return( -1 );
-	}
-	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
-	if( directory_entry == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_ARGUMENTS,
-		 LIBCERROR_ARGUMENT_ERROR_INVALID_VALUE,
-		 "%s: invalid directory entry.",
-		 function );
-
-		return( -1 );
-	}
-	internal_directory_entry = (libcdirectory_internal_directory_entry_t *) directory_entry;
-
-	if( internal_directory->handle != -1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - handle value already set.",
-		 function );
-
-		return( -1 );
-	}
-	if( internal_directory->first_entry != NULL )
-	{
-		if( libcdirectory_directory_entry_copy(
-		     directory_entry,
-		     internal_directory->first_entry,
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_MEMORY,
-			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-			 "%s: unable to copy first directory entry.",
-			 function );
-
-			return( -1 );
-		}
-		if( libcdirectory_directory_entry_free(
-		     &( internal_directory->first_entry ),
-		     error ) != 1 )
-		{
-			libcerror_error_set(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-			 LIBCERROR_RUNTIME_ERROR_FINALIZE_FAILED,
-			 "%s: unable to free first entry.",
-			 function );
-
-			return( -1 );
-		}
-	}
-	else
-	{
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-		if( internal_directory_entry->narrow_name != NULL )
-		{
-			memory_free(
-			 internal_directory_entry->narrow_name );
-
-			internal_directory_entry->narrow_name = NULL;
-		}
-#else
-		if( internal_directory_entry->wide_name != NULL )
-		{
-			memory_free(
-			 internal_directory_entry->wide_name );
-
-			internal_directory_entry->wide_name = NULL;
-		}
-#endif
-#endif
-#if defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-		result = _wfindnext(
-		          internal_directory->handle,
-		          &( internal_first_directory_entry->find_data ),
-		          0 );
-#else
-		result = findnext(
-		          internal_directory->handle,
-		          &( internal_first_directory_entry->find_data ),
-		          0 );
-#endif
-
-#else
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-#if defined( __BORLANDC__ )
-		result = __wfindnext(
-		          internal_directory->handle,
-		          &( internal_first_directory_entry->find_data ) );
-#else
-		result = _wfindnext(
-		          internal_directory->handle,
-		          &( internal_first_directory_entry->find_data ) );
-
-#endif /* defined( __BORLANDC__ ) */
-#else
-		result = _findnext(
-		          internal_directory->handle,
-		          &( internal_first_directory_entry->find_data ) );
-
-#endif /* defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER ) */
-#endif /* defined( __BORLANDC__ ) && __BORLANDC__ <= 0x0520 */
-
-		if( result != 0 )
-		{
-			libcerror_system_set_error(
-			 error,
-			 LIBCERROR_ERROR_DOMAIN_IO,
-			 LIBCERROR_IO_ERROR_READ_FAILED,
-			 errno,
-			 "%s: unable to read from directory.",
-			 function );
-
-			return( -1 );
-		}
-	}
-	return( 1 );
-}
 
 #elif defined( HAVE_READDIR_R )
 
