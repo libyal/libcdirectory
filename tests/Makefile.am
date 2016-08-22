@@ -20,6 +20,7 @@ EXTRA_DIST = \
 check_PROGRAMS = \
 	cdirectory_test_directory \
 	cdirectory_test_directory_entry \
+	cdirectory_test_error \
 	cdirectory_test_get_version
 
 cdirectory_test_directory_SOURCES = \
@@ -46,6 +47,19 @@ cdirectory_test_directory_entry_SOURCES = \
 	cdirectory_test_unused.h
 
 cdirectory_test_directory_entry_LDADD = \
+	../libcdirectory/libcdirectory.la \
+	@LIBCERROR_LIBADD@ \
+	@LIBCSTRING_LIBADD@
+
+cdirectory_test_error_SOURCES = \
+	cdirectory_test_error.c \
+	cdirectory_test_libcdirectory.h \
+	cdirectory_test_libcerror.h \
+	cdirectory_test_libcstring.h \
+	cdirectory_test_macros.h \
+	cdirectory_test_unused.h
+
+cdirectory_test_error_LDADD = \
 	../libcdirectory/libcdirectory.la \
 	@LIBCERROR_LIBADD@ \
 	@LIBCSTRING_LIBADD@

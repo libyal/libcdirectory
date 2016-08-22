@@ -137,12 +137,14 @@ int libcdirectory_directory_entry_get_name(
      libcerror_error_t **error );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
+
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_entry_get_name_wide(
      libcdirectory_directory_entry_t *directory_entry,
      wchar_t **name,
      libcerror_error_t **error );
-#endif
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 #if defined( __cplusplus )
 }

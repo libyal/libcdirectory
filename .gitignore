@@ -121,6 +121,7 @@ stamp-h[1-9]
 /libcdirectory/libcdirectory_definitions.h
 /tests/cdirectory_test_directory
 /tests/cdirectory_test_directory_entry
+/tests/cdirectory_test_error
 /tests/cdirectory_test_get_version
 /tests/tmp*
 
