@@ -19,9 +19,11 @@ check_PROGRAMS = \
 	cdirectory_test_get_version
 
 cdirectory_test_get_version_SOURCES = \
+	cdirectory_test_get_version.c \
 	cdirectory_test_libcdirectory.h \
 	cdirectory_test_libcstring.h \
-	cdirectory_test_get_version.c
+	cdirectory_test_macros.h \
+	cdirectory_test_unused.h
 
 cdirectory_test_get_version_LDADD = \
 	../libcdirectory/libcdirectory.la \

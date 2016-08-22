@@ -193,6 +193,14 @@
 				RelativePath="..\..\tests\cdirectory_test_libcstring.h"
 				>
 			</File>
+			<File
+				RelativePath="..\..\tests\cdirectory_test_macros.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\cdirectory_test_unused.h"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Resource Files"
