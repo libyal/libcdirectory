@@ -91,12 +91,14 @@ int libcdirectory_directory_open(
      libcerror_error_t **error );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
+
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_open_wide(
      libcdirectory_directory_t *directory,
      const wchar_t *directory_name,
      libcerror_error_t **error );
-#endif
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_close(
@@ -120,6 +122,7 @@ int libcdirectory_directory_has_entry(
      libcerror_error_t **error );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
+
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_has_entry_wide(
      libcdirectory_directory_t *directory,
@@ -129,11 +132,12 @@ int libcdirectory_directory_has_entry_wide(
      uint8_t entry_type,
      uint8_t compare_flags,
      libcerror_error_t **error );
-#endif
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 #if defined( __cplusplus )
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_H ) */
 

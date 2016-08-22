@@ -148,5 +148,5 @@ int libcdirectory_directory_entry_get_name_wide(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_ENTRY_H ) */
 
