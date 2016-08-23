@@ -33,10 +33,14 @@
 #include "cdirectory_test_memory.h"
 #include "cdirectory_test_unused.h"
 
+#if defined( __GNUC__ )
+
 extern int libcdirectory_directory_entry_copy(
             libcdirectory_directory_entry_t *destination_directory_entry,
             libcdirectory_directory_entry_t *source_directory_entry,
             libcerror_error_t **error );
+
+#endif /* defined( __GNUC__ ) */
 
 /* Tests the libcdirectory_directory_entry_initialize function
  * Returns 1 if successful or 0 if not
@@ -241,6 +245,8 @@ on_error:
 	return( 0 );
 }
 
+#if defined( __GNUC__ )
+
 /* Tests the libcdirectory_directory_entry_copy function
  * Returns 1 if successful or 0 if not
  */
@@ -279,6 +285,8 @@ on_error:
 	}
 	return( 0 );
 }
+
+#endif /* defined( __GNUC__ ) */
 
 /* Tests the libcdirectory_directory_entry_get_type function
  * Returns 1 if successful or 0 if not
