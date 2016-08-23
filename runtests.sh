@@ -76,7 +76,7 @@ run_configure_make_check_with_coverage()
 	export LDFLAGS="--coverage";
 
 	# Disable creating a shared library so we can hook memset.
-	run_configure_make_check --enable-shared=no --enable-wide-character-type;
+	run_configure_make_check "--enable-shared=no --enable-wide-character-type";
 	RESULT=$?;
 
 	export CFLAGS=;
