@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#if defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI )
+#if defined( HAVE_GNU_DL_DLSYM ) && defined( __GNUC__ ) && !defined( __clang__ )
 
 #define HAVE_CDIRECTORY_TEST_MEMORY		1
 
@@ -38,7 +38,7 @@ extern int cdirectory_test_memset_attempts_before_fail;
 
 extern int cdirectory_test_realloc_attempts_before_fail;
 
-#endif /* defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI ) */
+#endif /* defined( HAVE_GNU_DL_DLSYM ) && defined( __GNUC__ ) && !defined( __clang__ ) */
 
 #if defined( __cplusplus )
 }

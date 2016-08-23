@@ -25,13 +25,13 @@
 #include <stdlib.h>
 #endif
 
-#if defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI )
+#if defined( HAVE_GNU_DL_DLSYM ) && defined( __GNUC__ ) && !defined( __clang__ )
 #define __USE_GNU
 #include <dlfcn.h>
 #undef __USE_GNU
 #endif
 
-#if defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI )
+#if defined( HAVE_GNU_DL_DLSYM ) && defined( __GNUC__ ) && !defined( __clang__ )
 
 static void *(*cdirectory_test_real_malloc)(size_t)              = NULL;
 static void *(*cdirectory_test_real_memset)(void *, int, size_t) = NULL;
@@ -136,5 +136,5 @@ void *realloc(
 	return( ptr );
 }
 
-#endif /* defined( HAVE_GNU_DL_DLSYM ) && !defined( WINAPI ) */
+#endif /* defined( HAVE_GNU_DL_DLSYM ) && defined( __GNUC__ ) && !defined( __clang__ ) */
 
