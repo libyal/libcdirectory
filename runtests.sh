@@ -1,16 +1,16 @@
 #!/bin/sh
 # Script that runs the tests
 #
-# Version: 20160823
+# Version: 20160824
 
 EXIT_SUCCESS=0;
 EXIT_FAILURE=1;
 
 run_configure_make()
 {
-	local CONFIGURE_OPTIONS=$1;
+	local CONFIGURE_OPTIONS=$@;
 
-	./configure ${CONFIGURE_OPTIONS};
+	./configure ${CONFIGURE_OPTIONS[@]};
 	RESULT=$?;
 
 	if test ${RESULT} -ne ${EXIT_SUCCESS};
@@ -44,7 +44,7 @@ run_configure_make()
 
 run_configure_make_check()
 {
-	run_configure_make $1;
+	run_configure_make $@;
 	RESULT=$?;
 
 	if test ${RESULT} -ne ${EXIT_SUCCESS};
@@ -87,7 +87,7 @@ run_configure_make_check_with_coverage()
 
 run_configure_make_check_python()
 {
-	run_configure_make $1;
+	run_configure_make $@;
 	RESULT=$?;
 
 	if test ${RESULT} -ne ${EXIT_SUCCESS};
