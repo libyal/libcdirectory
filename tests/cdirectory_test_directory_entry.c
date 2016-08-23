@@ -253,13 +253,58 @@ on_error:
 int cdirectory_test_directory_entry_copy(
      void )
 {
-	libcerror_error_t *error = NULL;
-	int result               = 0;
+	libcdirectory_directory_entry_t *destination_directory_entry = NULL;
+	libcdirectory_directory_entry_t *directory_entry             = NULL;
+	libcerror_error_t *error                                     = NULL;
+	int result                                                   = 0;
+
+	/* Initialize test
+	 */
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	result = libcdirectory_directory_entry_initialize(
+	          &destination_directory_entry,
+	          &error );
+
+	/* Test directory entry copy
+	 */
+	result = libcdirectory_directory_entry_copy(
+	          destination_directory_entry,
+	          directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
 
 	/* Test error cases
 	 */
 	result = libcdirectory_directory_entry_copy(
 	          NULL,
+	          directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 -1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+         "error",
+         error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libcdirectory_directory_entry_copy(
+	          destination_directory_entry,
 	          NULL,
 	          &error );
 
@@ -275,6 +320,16 @@ int cdirectory_test_directory_entry_copy(
 	libcerror_error_free(
 	 &error );
 
+	/* Clean up
+	 */
+	result = libcdirectory_directory_entry_free(
+	          &destination_directory_entry,
+	          NULL );
+
+	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          NULL );
+
 	return( 1 );
 
 on_error:
@@ -282,6 +337,18 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( destination_directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &destination_directory_entry,
+		 NULL );
+	}
+	if( directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &directory_entry,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -294,9 +361,56 @@ on_error:
 int cdirectory_test_directory_entry_get_type(
      void )
 {
-	libcerror_error_t *error = NULL;
-	int result               = 0;
-	uint8_t entry_type       = 0;
+	libcdirectory_directory_t *directory             = NULL;
+	libcdirectory_directory_entry_t *directory_entry = NULL;
+	libcerror_error_t *error                         = NULL;
+	int result                                       = 0;
+	uint8_t entry_type                               = 0;
+
+	/* Initialize test
+	 */
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "Makefile.am",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          0,
+	          &error );
+
+	/* Test retrieving the type of a directory entry
+	 */
+	result = libcdirectory_directory_entry_get_type(
+	          directory_entry,
+	          &entry_type,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "entry_type",
+	 entry_type,
+	 LIBCDIRECTORY_ENTRY_TYPE_FILE );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
 
 	/* Test error cases
 	 */
@@ -317,6 +431,16 @@ int cdirectory_test_directory_entry_get_type(
 	libcerror_error_free(
 	 &error );
 
+	/* Clean up
+	 */
+	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          NULL );
+
+	result = libcdirectory_directory_free(
+	          &directory,
+	          NULL );
+
 	return( 1 );
 
 on_error:
@@ -324,6 +448,18 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &directory_entry,
+		 NULL );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -334,9 +470,61 @@ on_error:
 int cdirectory_test_directory_entry_get_name(
      void )
 {
-	libcerror_error_t *error = NULL;
-	char *entry_name         = NULL;
-	int result               = 0;
+	libcdirectory_directory_t *directory             = NULL;
+	libcdirectory_directory_entry_t *directory_entry = NULL;
+	libcerror_error_t *error                         = NULL;
+	char *entry_name                                 = NULL;
+	int result                                       = 0;
+
+	/* Initialize test
+	 */
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "Makefile.am",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          0,
+	          &error );
+
+	/* Test retrieving the name of a directory entry
+	 */
+	result = libcdirectory_directory_entry_get_name(
+	          directory_entry,
+	          &entry_name,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcstring_narrow_string_compare(
+	          entry_name,
+	          "Makefile.am",
+	          11 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 0 );
 
 	/* Test error cases
 	 */
@@ -357,6 +545,16 @@ int cdirectory_test_directory_entry_get_name(
 	libcerror_error_free(
 	 &error );
 
+	/* Clean up
+	 */
+	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          NULL );
+
+	result = libcdirectory_directory_free(
+	          &directory,
+	          NULL );
+
 	return( 1 );
 
 on_error:
@@ -364,6 +562,18 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &directory_entry,
+		 NULL );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -376,9 +586,61 @@ on_error:
 int cdirectory_test_directory_entry_get_name_wide(
      void )
 {
-	libcerror_error_t *error = NULL;
-	wchar_t *entry_name      = NULL;
-	int result               = 0;
+	libcdirectory_directory_t *directory             = NULL;
+	libcdirectory_directory_entry_t *directory_entry = NULL;
+	libcerror_error_t *error                         = NULL;
+	wchar_t *entry_name                              = NULL;
+	int result                                       = 0;
+
+	/* Initialize test
+	 */
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	result = libcdirectory_directory_has_entry_wide(
+	          directory,
+	          directory_entry,
+	          L"Makefile.am",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          0,
+	          &error );
+
+	/* Test retrieving the name of a directory entry
+	 */
+	result = libcdirectory_directory_entry_get_name_wide(
+	          directory_entry,
+	          &entry_name,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcstring_wide_string_compare(
+	          entry_name,
+	          L"Makefile.am",
+	          11 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 0 );
 
 	/* Test error cases
 	 */
@@ -399,6 +661,16 @@ int cdirectory_test_directory_entry_get_name_wide(
 	libcerror_error_free(
 	 &error );
 
+	/* Clean up
+	 */
+	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          NULL );
+
+	result = libcdirectory_directory_free(
+	          &directory,
+	          NULL );
+
 	return( 1 );
 
 on_error:
@@ -406,6 +678,18 @@ on_error:
 	{
 		libcerror_error_free(
 		 &error );
+	}
+	if( directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &directory_entry,
+		 NULL );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
+		 NULL );
 	}
 	return( 0 );
 }
@@ -435,9 +719,13 @@ int main(
 	 "libcdirectory_directory_entry_free",
 	 cdirectory_test_directory_entry_free() )
 
+#if defined( __GNUC__ )
+
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_entry_copy",
 	 cdirectory_test_directory_entry_copy() )
+
+#endif /* defined( __GNUC__ ) */
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_entry_get_type",
