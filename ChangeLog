@@ -1,3 +1,13 @@
+TODO:
+* change libcdirectory_directory_has_entry(_wide) to not require explicit
+  open/close directory before usage
+
+20160824
+* worked on tests
+
+20160823
+* worked on tests
+
 20160822
 * worked on tests
 * removed USE_CRT_FUNCTIONS support

@@ -769,17 +769,18 @@ int cdirectory_test_directory_has_entry(
 	          &directory,
 	          &error );
 
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	/* Test has entry match
+	 */
+/* TODO: remove the need for the explicit open/close */
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
 
-	result = libcdirectory_directory_entry_initialize(
-	          &directory_entry,
-	          &error );
-
-	/* Test has entry
-	 */
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
@@ -797,6 +798,68 @@ int cdirectory_test_directory_has_entry(
         CDIRECTORY_TEST_ASSERT_IS_NULL(
          "error",
          error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	/* Test has entry non-match
+	 */
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "MAKEFILE.AM",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          0,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 0 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	/* Test has entry with caseless compare
+	 */
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "MAKEFILE.AM",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
 
 	/* Test error cases
 	 */
@@ -978,17 +1041,17 @@ int cdirectory_test_directory_has_entry_wide(
 	          &directory,
 	          &error );
 
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	/* Test has entry match
+	 */
 	result = libcdirectory_directory_open_wide(
 	          directory,
 	          L".",
 	          &error );
 
-	result = libcdirectory_directory_entry_initialize(
-	          &directory_entry,
-	          &error );
-
-	/* Test has entry
-	 */
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
@@ -1006,6 +1069,68 @@ int cdirectory_test_directory_has_entry_wide(
         CDIRECTORY_TEST_ASSERT_IS_NULL(
          "error",
          error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	/* Test has entry non-match
+	 */
+	result = libcdirectory_directory_open_wide(
+	          directory,
+	          L".",
+	          &error );
+
+	result = libcdirectory_directory_has_entry_wide(
+	          directory,
+	          directory_entry,
+	          L"MAKEFILE.AM",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          0,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 0 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	/* Test has entry with caseless compare
+	 */
+	result = libcdirectory_directory_open_wide(
+	          directory,
+	          L".",
+	          &error );
+
+	result = libcdirectory_directory_has_entry_wide(
+	          directory,
+	          directory_entry,
+	          L"MAKEFILE.AM",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
 
 	/* Test error cases
 	 */

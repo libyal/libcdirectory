@@ -34,6 +34,8 @@ extern "C" {
 
 extern int cdirectory_test_malloc_attempts_before_fail;
 
+extern int cdirectory_test_memcpy_attempts_before_fail;
+
 extern int cdirectory_test_memset_attempts_before_fail;
 
 extern int cdirectory_test_realloc_attempts_before_fail;

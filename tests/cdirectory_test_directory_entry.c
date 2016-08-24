@@ -320,6 +320,37 @@ int cdirectory_test_directory_entry_copy(
 	libcerror_error_free(
 	 &error );
 
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
+
+	/* Test libcdirectory_directory_entry_initialize with memcpy failing
+	 */
+	cdirectory_test_memcpy_attempts_before_fail = 0;
+
+	result = libcdirectory_directory_entry_copy(
+	          destination_directory_entry,
+	          directory_entry,
+	          &error );
+
+	if( cdirectory_test_memcpy_attempts_before_fail != -1 )
+	{
+		cdirectory_test_memcpy_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL(
+		 "result",
+		 result,
+		 -1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
+
+		libcerror_error_free(
+		 &error );
+	}
+#endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
+
 	/* Clean up
 	 */
 	result = libcdirectory_directory_entry_free(
