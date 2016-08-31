@@ -1,4 +1,5 @@
 TODO:
+* Add WINVER < 0x0500 support
 * change libcdirectory_directory_has_entry(_wide) to not require explicit
   open/close directory before usage
 
