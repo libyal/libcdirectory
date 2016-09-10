@@ -46,7 +46,7 @@ int cdirectory_test_get_version(
 	          LIBCDIRECTORY_VERSION_STRING,
 	          9 );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 0 );
