@@ -20,7 +20,6 @@
  */
 
 #include <common.h>
-#include <file_stream.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -110,9 +109,13 @@ int cdirectory_test_error_backtrace_sprint(
 /* The main program
  */
 #if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
-int wmain( int argc, wchar_t * const argv[] )
+int wmain(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #else
-int main( int argc, char * const argv[] )
+int main(
+     int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
+     char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #endif
 {
 	CDIRECTORY_TEST_UNREFERENCED_PARAMETER( argc )

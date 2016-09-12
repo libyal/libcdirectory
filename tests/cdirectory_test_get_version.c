@@ -25,8 +25,8 @@
 #include <stdlib.h>
 #endif
 
-#include "cdirectory_test_libcstring.h"
 #include "cdirectory_test_libcdirectory.h"
+#include "cdirectory_test_libcstring.h"
 #include "cdirectory_test_macros.h"
 #include "cdirectory_test_unused.h"
 
