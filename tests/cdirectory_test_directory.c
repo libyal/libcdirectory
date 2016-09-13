@@ -773,6 +773,7 @@ int cdirectory_test_directory_has_entry(
 	          &directory_entry,
 	          &error );
 
+#if !defined( WINAPI )
 	/* Test has entry match
 	 */
 /* TODO: remove the need for the explicit open/close */
@@ -831,6 +832,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_close(
 	          directory,
 	          &error );
+
+#endif /* !defined( WINAPI ) */
 
 	/* Test has entry with caseless compare
 	 */
@@ -1045,6 +1048,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          &directory_entry,
 	          &error );
 
+#if !defined( WINAPI )
 	/* Test has entry match
 	 */
 	result = libcdirectory_directory_open_wide(
@@ -1102,6 +1106,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_close(
 	          directory,
 	          &error );
+
+#endif /* !defined( WINAPI ) */
 
 	/* Test has entry with caseless compare
 	 */
