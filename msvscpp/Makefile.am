@@ -2,7 +2,7 @@ MSVSCPP_FILES = \
 	cdirectory_test_directory/cdirectory_test_directory.vcproj \
 	cdirectory_test_directory_entry/cdirectory_test_directory_entry.vcproj \
 	cdirectory_test_error/cdirectory_test_error.vcproj \
-	cdirectory_test_get_version/cdirectory_test_get_version.vcproj \
+	cdirectory_test_support/cdirectory_test_support.vcproj \
 	libcdirectory/libcdirectory.vcproj \
 	libcerror/libcerror.vcproj \
 	libclocale/libclocale.vcproj \
