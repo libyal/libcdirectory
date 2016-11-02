@@ -49,7 +49,7 @@ int cdirectory_test_directory_initialize(
 	          &directory,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -66,7 +66,7 @@ int cdirectory_test_directory_initialize(
 	          &directory,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -85,7 +85,7 @@ int cdirectory_test_directory_initialize(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -103,7 +103,7 @@ int cdirectory_test_directory_initialize(
 	          &directory,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -133,7 +133,7 @@ int cdirectory_test_directory_initialize(
 	}
 	else
 	{
-		CDIRECTORY_TEST_ASSERT_EQUAL(
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 		 "result",
 		 result,
 		 -1 );
@@ -163,7 +163,7 @@ int cdirectory_test_directory_initialize(
 	}
 	else
 	{
-		CDIRECTORY_TEST_ASSERT_EQUAL(
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 		 "result",
 		 result,
 		 -1 );
@@ -213,7 +213,7 @@ int cdirectory_test_directory_free(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -259,7 +259,7 @@ int cdirectory_test_directory_open(
 	          ".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -275,7 +275,7 @@ int cdirectory_test_directory_open(
 	          ".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -300,7 +300,7 @@ int cdirectory_test_directory_open(
 	          "Makefile.am",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -319,7 +319,7 @@ int cdirectory_test_directory_open(
 	          ".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -336,7 +336,7 @@ int cdirectory_test_directory_open(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -396,7 +396,7 @@ int cdirectory_test_directory_open_wide(
 	          L".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -412,7 +412,7 @@ int cdirectory_test_directory_open_wide(
 	          L"Makefile.am",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -431,7 +431,7 @@ int cdirectory_test_directory_open_wide(
 	          L".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -456,7 +456,7 @@ int cdirectory_test_directory_open_wide(
 	          L".",
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -473,7 +473,7 @@ int cdirectory_test_directory_open_wide(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -502,7 +502,7 @@ int cdirectory_test_directory_open_wide(
 	}
 	else
 	{
-		CDIRECTORY_TEST_ASSERT_EQUAL(
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 		 "result",
 		 result,
 		 -1 );
@@ -568,7 +568,7 @@ int cdirectory_test_directory_close(
 	          directory,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 0 );
@@ -583,7 +583,7 @@ int cdirectory_test_directory_close(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -651,7 +651,7 @@ int cdirectory_test_directory_read_entry(
 	          directory_entry,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -673,7 +673,7 @@ int cdirectory_test_directory_read_entry(
 	          directory_entry,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -690,7 +690,7 @@ int cdirectory_test_directory_read_entry(
 	          NULL,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -707,7 +707,7 @@ int cdirectory_test_directory_read_entry(
 	          directory_entry,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -791,7 +791,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -820,7 +820,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 0 );
@@ -851,7 +851,7 @@ int cdirectory_test_directory_has_entry(
 	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -875,7 +875,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -896,7 +896,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -917,7 +917,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -938,7 +938,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -959,7 +959,7 @@ int cdirectory_test_directory_has_entry(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -980,7 +980,7 @@ int cdirectory_test_directory_has_entry(
 	          80,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1065,7 +1065,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -1094,7 +1094,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 0 );
@@ -1125,7 +1125,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 1 );
@@ -1149,7 +1149,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1170,7 +1170,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1191,7 +1191,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1212,7 +1212,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1233,7 +1233,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          0,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1254,7 +1254,7 @@ int cdirectory_test_directory_has_entry_wide(
 	          80,
 	          &error );
 
-	CDIRECTORY_TEST_ASSERT_EQUAL(
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
 	 -1 );
@@ -1318,41 +1318,41 @@ int main(
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_initialize",
-	 cdirectory_test_directory_initialize() )
+	 cdirectory_test_directory_initialize );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_free",
-	 cdirectory_test_directory_free() )
+	 cdirectory_test_directory_free );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_open",
-	 cdirectory_test_directory_open() )
+	 cdirectory_test_directory_open );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_open_wide",
-	 cdirectory_test_directory_open_wide() )
+	 cdirectory_test_directory_open_wide );
 
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_close",
-	 cdirectory_test_directory_close() )
+	 cdirectory_test_directory_close );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_read_entry",
-	 cdirectory_test_directory_read_entry() )
+	 cdirectory_test_directory_read_entry );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_has_entry",
-	 cdirectory_test_directory_has_entry() )
+	 cdirectory_test_directory_has_entry );
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_has_entry_wide",
-	 cdirectory_test_directory_has_entry_wide() )
+	 cdirectory_test_directory_has_entry_wide );
 
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 

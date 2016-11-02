@@ -123,23 +123,23 @@ int main(
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_error_free",
-	 cdirectory_test_error_free() )
+	 cdirectory_test_error_free );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_error_fprint",
-	 cdirectory_test_error_fprint() )
+	 cdirectory_test_error_fprint );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_error_sprint",
-	 cdirectory_test_error_sprint() )
+	 cdirectory_test_error_sprint );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_error_backtrace_fprint",
-	 cdirectory_test_error_backtrace_fprint() )
+	 cdirectory_test_error_backtrace_fprint );
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_error_backtrace_sprint",
-	 cdirectory_test_error_backtrace_sprint() )
+	 cdirectory_test_error_backtrace_sprint );
 
 	return( EXIT_SUCCESS );
 

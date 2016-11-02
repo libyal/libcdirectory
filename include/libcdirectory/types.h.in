@@ -208,5 +208,5 @@ typedef intptr_t libcdirectory_directory_entry_t;
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBCDIRECTORY_TYPES_H ) */
 

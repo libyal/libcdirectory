@@ -33,13 +33,13 @@ typedef intptr_t libcdirectory_error_t;
 enum LIBCDIRECTORY_ERROR_DOMAINS
 {
 	LIBCDIRECTORY_ERROR_DOMAIN_ARGUMENTS			= (int) 'a',
-	LIBCDIRECTORY_ERROR_DOMAIN_CONVERSION		= (int) 'c',
-	LIBCDIRECTORY_ERROR_DOMAIN_COMPRESSION		= (int) 'C',
-	LIBCDIRECTORY_ERROR_DOMAIN_IO			= (int) 'I',
+	LIBCDIRECTORY_ERROR_DOMAIN_CONVERSION			= (int) 'c',
+	LIBCDIRECTORY_ERROR_DOMAIN_COMPRESSION			= (int) 'C',
+	LIBCDIRECTORY_ERROR_DOMAIN_IO				= (int) 'I',
 	LIBCDIRECTORY_ERROR_DOMAIN_INPUT			= (int) 'i',
 	LIBCDIRECTORY_ERROR_DOMAIN_MEMORY			= (int) 'm',
 	LIBCDIRECTORY_ERROR_DOMAIN_OUTPUT			= (int) 'o',
-	LIBCDIRECTORY_ERROR_DOMAIN_RUNTIME			= (int) 'r',
+	LIBCDIRECTORY_ERROR_DOMAIN_RUNTIME			= (int) 'r'
 };
 
 /* The argument error codes
@@ -59,7 +59,7 @@ enum LIBCDIRECTORY_ARGUMENT_ERROR
 
 	/* The argument contains a value zero or less
 	 */
-	LIBCDIRECTORY_ARGUMENT_ERROR_VALUE_ZERO_OR_LESS	= 3,
+	LIBCDIRECTORY_ARGUMENT_ERROR_VALUE_ZERO_OR_LESS		= 3,
 
 	/* The argument contains a value that exceeds the maximum
 	 * for the specific type
@@ -80,11 +80,11 @@ enum LIBCDIRECTORY_ARGUMENT_ERROR
 
 	/* The argument contains a value that is not supported
 	 */
-	LIBCDIRECTORY_ARGUMENT_ERROR_UNSUPPORTED_VALUE	= 8,
+	LIBCDIRECTORY_ARGUMENT_ERROR_UNSUPPORTED_VALUE		= 8,
 
 	/* The argument contains a value that conficts with another argument
 	 */
-	LIBCDIRECTORY_ARGUMENT_ERROR_CONFLICTING_VALUE	= 9
+	LIBCDIRECTORY_ARGUMENT_ERROR_CONFLICTING_VALUE		= 9
 };
 
 /* The conversion error codes
@@ -92,7 +92,7 @@ enum LIBCDIRECTORY_ARGUMENT_ERROR
  */
 enum LIBCDIRECTORY_CONVERSION_ERROR
 {
-	LIBCDIRECTORY_CONVERSION_ERROR_GENERIC		= 0,
+	LIBCDIRECTORY_CONVERSION_ERROR_GENERIC			= 0,
 
 	/* The conversion failed on the input
 	 */
@@ -108,11 +108,11 @@ enum LIBCDIRECTORY_CONVERSION_ERROR
  */
 enum LIBCDIRECTORY_COMPRESSION_ERROR
 {
-	LIBCDIRECTORY_COMPRESSION_ERROR_GENERIC		= 0,
+	LIBCDIRECTORY_COMPRESSION_ERROR_GENERIC			= 0,
 
 	/* The compression failed
 	 */
-	LIBCDIRECTORY_COMPRESSION_ERROR_COMPRESS_FAILED	= 1,
+	LIBCDIRECTORY_COMPRESSION_ERROR_COMPRESS_FAILED		= 1,
 
 	/* The decompression failed
 	 */
@@ -124,7 +124,7 @@ enum LIBCDIRECTORY_COMPRESSION_ERROR
  */
 enum LIBCDIRECTORY_IO_ERROR
 {
-	LIBCDIRECTORY_IO_ERROR_GENERIC			= 0,
+	LIBCDIRECTORY_IO_ERROR_GENERIC				= 0,
 
 	/* The open failed
 	 */
@@ -152,7 +152,7 @@ enum LIBCDIRECTORY_IO_ERROR
 
 	/* The resource is invalid i.e. a missing file
 	 */
-	LIBCDIRECTORY_IO_ERROR_INVALID_RESOURCE		= 7,
+	LIBCDIRECTORY_IO_ERROR_INVALID_RESOURCE			= 7,
 
 	/* The ioctl failed
 	 */
@@ -172,7 +172,7 @@ enum LIBCDIRECTORY_INPUT_ERROR
 
 	/* The input contains invalid data
 	 */
-	LIBCDIRECTORY_INPUT_ERROR_INVALID_DATA		= 1,
+	LIBCDIRECTORY_INPUT_ERROR_INVALID_DATA			= 1,
 
 	/* The input contains an unsupported signature
 	 */
@@ -197,15 +197,26 @@ enum LIBCDIRECTORY_MEMORY_ERROR
 
 	/* There is insufficient memory available
 	 */
-	LIBCDIRECTORY_MEMORY_ERROR_INSUFFICIENT		= 1,
+	LIBCDIRECTORY_MEMORY_ERROR_INSUFFICIENT			= 1,
 
 	/* The memory failed to be copied
 	 */
-	LIBCDIRECTORY_MEMORY_ERROR_COPY_FAILED		= 2,
+	LIBCDIRECTORY_MEMORY_ERROR_COPY_FAILED			= 2,
 
 	/* The memory failed to be set
 	 */
-	LIBCDIRECTORY_MEMORY_ERROR_SET_FAILED		= 3
+	LIBCDIRECTORY_MEMORY_ERROR_SET_FAILED			= 3
+};
+
+/* The output error codes
+ */
+enum LIBCDIRECTORY_OUTPUT_ERROR
+{
+	LIBCDIRECTORY_OUTPUT_ERROR_GENERIC			= 0,
+
+	/* There is insuficient space to write the output
+	 */
+	LIBCDIRECTORY_OUTPUT_ERROR_INSUFFICIENT_SPACE		= 1
 };
 
 /* The runtime error codes
@@ -221,11 +232,11 @@ enum LIBCDIRECTORY_RUNTIME_ERROR
 
 	/* The value was already set
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_VALUE_ALREADY_SET	= 2,
+	LIBCDIRECTORY_RUNTIME_ERROR_VALUE_ALREADY_SET		= 2,
 
 	/* The creation and/or initialization of an internal structure failed
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_INITIALIZE_FAILED	= 3,
+	LIBCDIRECTORY_RUNTIME_ERROR_INITIALIZE_FAILED		= 3,
 
 	/* The resize of an internal structure failed
 	 */
@@ -237,11 +248,11 @@ enum LIBCDIRECTORY_RUNTIME_ERROR
 
 	/* The value could not be determined
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_GET_FAILED		= 6,
+	LIBCDIRECTORY_RUNTIME_ERROR_GET_FAILED			= 6,
 
 	/* The value could not be set
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_SET_FAILED		= 7,
+	LIBCDIRECTORY_RUNTIME_ERROR_SET_FAILED			= 7,
 
 	/* The value could not be appended/prepended
 	 */
@@ -249,7 +260,7 @@ enum LIBCDIRECTORY_RUNTIME_ERROR
 
 	/* The value could not be copied
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_COPY_FAILED		= 9,
+	LIBCDIRECTORY_RUNTIME_ERROR_COPY_FAILED			= 9,
 
 	/* The value could not be removed
 	 */
@@ -261,7 +272,7 @@ enum LIBCDIRECTORY_RUNTIME_ERROR
 
 	/* The value was out of bounds
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS	= 12,
+	LIBCDIRECTORY_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS		= 12,
 
 	/* The value exceeds the maximum for its specific type
 	 */
@@ -269,23 +280,12 @@ enum LIBCDIRECTORY_RUNTIME_ERROR
 
 	/* The value is unsupported
 	 */
-	LIBCDIRECTORY_RUNTIME_ERROR_UNSUPPORTED_VALUE	= 14,
+	LIBCDIRECTORY_RUNTIME_ERROR_UNSUPPORTED_VALUE		= 14,
 
 	/* An abort was requested
 	 */
 	LIBCDIRECTORY_RUNTIME_ERROR_ABORT_REQUESTED		= 15
 };
 
-/* The output error codes
- */
-enum LIBCDIRECTORY_OUTPUT_ERROR
-{
-	LIBCDIRECTORY_OUTPUT_ERROR_GENERIC			= 0,
-
-	/* There is insuficient space to write the output
-	 */
-	LIBCDIRECTORY_OUTPUT_ERROR_INSUFFICIENT_SPACE	= 1
-};
-
-#endif
+#endif /* !defined( _LIBCDIRECTORY_ERROR_H ) */
 
