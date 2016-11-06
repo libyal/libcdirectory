@@ -59,12 +59,14 @@ cdirectory_test_error_LDADD = \
 
 cdirectory_test_support_SOURCES = \
 	cdirectory_test_libcdirectory.h \
+	cdirectory_test_libcerror.h \
 	cdirectory_test_macros.h \
 	cdirectory_test_support.c \
 	cdirectory_test_unused.h
 
 cdirectory_test_support_LDADD = \
-	../libcdirectory/libcdirectory.la
+	../libcdirectory/libcdirectory.la \
+	@LIBCERROR_LIBADD@
 
 MAINTAINERCLEANFILES = \
 	Makefile.in

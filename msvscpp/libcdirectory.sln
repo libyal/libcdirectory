@@ -22,6 +22,7 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cdirectory_test_support", "cdirectory_test_support\cdirectory_test_support.vcproj", "{5A79103A-12A9-41F4-B16B-096D14678320}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4} = {EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}
+		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libclocale", "libclocale\libclocale.vcproj", "{D912B2AE-867E-4908-BF1C-4313D32C3FCC}"
