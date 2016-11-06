@@ -48,8 +48,7 @@
 #include "libcdirectory_definitions.h"
 #include "libcdirectory_directory_entry.h"
 #include "libcdirectory_libcerror.h"
-#include "libcdirectory_libclocale.h"
-#include "libcdirectory_libuna.h"
+#include "libcdirectory_system_string.h"
 #include "libcdirectory_types.h"
 
 /* Creates a directory entry
@@ -410,9 +409,8 @@ int libcdirectory_directory_entry_get_name(
 
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	const wchar_t *directory_name                                      = NULL;
-	size_t directory_name_size                                         = 0;
+	size_t directory_name_length                                       = 0;
 	size_t narrow_directory_name_size                                  = 0;
-	int result                                                         = 0;
 #endif
 
 	if( directory_entry == NULL )
@@ -442,48 +440,14 @@ int libcdirectory_directory_entry_get_name(
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	directory_name = internal_directory_entry->find_data.cFileName;
 
-	directory_name_size = 1 + wide_string_length(
-	                           directory_name );
+	directory_name_length = wide_string_length(
+	                         directory_name );
 
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_size_to_narrow_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &narrow_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -508,49 +472,12 @@ int libcdirectory_directory_entry_get_name(
 
 		goto on_error;
 	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_copy_from_utf32(
-		          (libuna_utf8_character_t *) internal_directory_entry->narrow_name,
-		          narrow_directory_name_size,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_copy_from_utf16(
-		          (libuna_utf8_character_t *) internal_directory_entry->narrow_name,
-		          narrow_directory_name_size,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_copy_from_utf32(
-		          (uint8_t *) internal_directory_entry->narrow_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_copy_from_utf16(
-		          (uint8_t *) internal_directory_entry->narrow_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_copy_to_narrow_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     internal_directory_entry->narrow_name,
+	     narrow_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -650,9 +577,8 @@ int libcdirectory_directory_entry_get_name_wide(
 
 #if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	const char *directory_name                                         = NULL;
-	size_t directory_name_size                                         = 0;
+	size_t directory_name_length                                       = 0;
 	size_t wide_directory_name_size                                    = 0;
-	int result                                                         = 0;
 #endif
 
 	if( directory_entry == NULL )
@@ -684,48 +610,14 @@ int libcdirectory_directory_entry_get_name_wide(
 #else
 	directory_name = internal_directory_entry->find_data.cFileName;
 
-	directory_name_size = 1 + narrow_string_length(
-	                           directory_name );
+	directory_name_length = narrow_string_length(
+	                         directory_name );
 
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_utf8(
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_utf8(
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_byte_stream(
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_byte_stream(
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_size_to_wide_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &wide_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -750,49 +642,12 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		goto on_error;
 	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_utf8(
-		          (libuna_utf32_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_utf8(
-		          (libuna_utf16_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_byte_stream(
-		          (libuna_utf32_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_byte_stream(
-		          (libuna_utf16_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_copy_to_wide_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     internal_directory_entry->wide_name,
+	     wide_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -838,9 +693,8 @@ int libcdirectory_directory_entry_get_name_wide(
 {
 	libcdirectory_internal_directory_entry_t *internal_directory_entry = NULL;
 	static char *function                                              = "libcdirectory_directory_entry_get_name_wide";
-	size_t directory_name_size                                         = 0;
+	size_t directory_name_length                                       = 0;
 	size_t wide_directory_name_size                                    = 0;
-	int result                                                         = 0;
 
 	if( directory_entry == NULL )
 	{
@@ -866,48 +720,14 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		return( -1 );
 	}
-	directory_name_size = 1 + narrow_string_length(
-	                           internal_directory_entry->entry.d_name );
+	directory_name_length = narrow_string_length(
+	                         internal_directory_entry->entry.d_name );
 
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_utf8(
-		          (libuna_utf8_character_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_utf8(
-		          (libuna_utf8_character_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_byte_stream(
-		          (uint8_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_byte_stream(
-		          (uint8_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_size_to_wide_string(
+	     internal_directory_entry->entry.d_name,
+	     directory_name_length + 1,
+	     &wide_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
@@ -932,49 +752,12 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		goto on_error;
 	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_utf8(
-		          (libuna_utf32_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_utf8(
-		          (libuna_utf16_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_byte_stream(
-		          (libuna_utf32_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (uint8_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_byte_stream(
-		          (libuna_utf16_character_t *) internal_directory_entry->wide_name,
-		          wide_directory_name_size,
-		          (uint8_t *) internal_directory_entry->entry.d_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_copy_to_wide_string(
+	     internal_directory_entry->entry.d_name,
+	     directory_name_length + 1,
+	     internal_directory_entry->wide_name,
+	     wide_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,

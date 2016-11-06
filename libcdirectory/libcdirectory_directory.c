@@ -22,6 +22,7 @@
 #include <common.h>
 #include <memory.h>
 #include <narrow_string.h>
+#include <system_string.h>
 #include <types.h>
 #include <wide_string.h>
 
@@ -49,8 +50,7 @@
 #include "libcdirectory_directory.h"
 #include "libcdirectory_directory_entry.h"
 #include "libcdirectory_libcerror.h"
-#include "libcdirectory_libclocale.h"
-#include "libcdirectory_libuna.h"
+#include "libcdirectory_system_string.h"
 #include "libcdirectory_types.h"
 #include "libcdirectory_wide_string.h"
 
@@ -199,18 +199,11 @@ int libcdirectory_directory_open(
 {
 	libcdirectory_internal_directory_t *internal_directory                   = NULL;
 	libcdirectory_internal_directory_entry_t *internal_first_directory_entry = NULL;
+	system_character_t *system_directory_name                                = NULL;
 	static char *function                                                    = "libcdirectory_directory_open";
-	size_t directory_name_size                                               = 0;
+	size_t directory_name_length                                             = 0;
+	size_t system_directory_name_size                                        = 0;
 	DWORD error_code                                                         = 0;
-
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	wchar_t *wide_directory_name                                             = NULL;
-	size_t wide_directory_name_size                                          = 0;
-	int result                                                               = 0;
-#else
-	char *narrow_directory_name                                              = NULL;
-	size_t narrow_directory_name_size                                        = 0;
-#endif
 
 	if( directory == NULL )
 	{
@@ -284,200 +277,82 @@ int libcdirectory_directory_open(
 	}
 	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
 
-	directory_name_size = 1 + narrow_string_length(
-	                           directory_name );
+	directory_name_length = narrow_string_length(
+	                         directory_name );
 
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_utf8(
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_utf8(
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_size_from_byte_stream(
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_size_from_byte_stream(
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &wide_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_size_from_narrow_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &system_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
 		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to determine wide character directory name size.",
+		 "%s: unable to determine system character directory name size.",
 		 function );
 
 		goto on_error;
 	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( ( directory_name_size < 3 )
-	 || ( directory_name[ directory_name_size - 2 ] != '\\' ) )
+	if( ( directory_name_length < 2 )
+	 || ( directory_name[ directory_name_length - 1 ] != '\\' ) )
 	{
-		wide_directory_name_size += 1;
+		system_directory_name_size += 1;
 	}
-	wide_directory_name_size += 1;
+	system_directory_name_size += 1;
 
-	wide_directory_name = wide_string_allocate(
-	                       wide_directory_name_size );
+	system_directory_name = system_string_allocate(
+	                         system_directory_name_size );
 
-	if( wide_directory_name == NULL )
+	if( system_directory_name == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
 		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create wide character directory name.",
+		 "%s: unable to create system character directory name.",
 		 function );
 
 		goto on_error;
 	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_utf8(
-		          (libuna_utf32_character_t *) wide_directory_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_utf8(
-		          (libuna_utf16_character_t *) wide_directory_name,
-		          wide_directory_name_size,
-		          (libuna_utf8_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf32_string_copy_from_byte_stream(
-		          (libuna_utf32_character_t *) wide_directory_name,
-		          wide_directory_name_size,
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf16_string_copy_from_byte_stream(
-		          (libuna_utf16_character_t *) wide_directory_name,
-		          wide_directory_name_size,
-		          (uint8_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_copy_from_narrow_string(
+	     system_directory_name,
+	     system_directory_name_size,
+	     directory_name,
+	     directory_name_length + 1,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
 		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to set wide character directory name.",
+		 "%s: unable to set system character directory name.",
 		 function );
 
 		goto on_error;
 	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( directory_name[ directory_name_size - 2 ] != '\\' )
+	if( ( directory_name_length < 2 )
+	 || ( directory_name[ directory_name_length - 1 ] != '\\' ) )
 	{
-		wide_directory_name[ wide_directory_name_size - 3 ] = (wchar_t) '\\';
+		system_directory_name[ system_directory_name_size - 3 ] = (system_character_t) '\\';
 	}
-	wide_directory_name[ wide_directory_name_size - 2 ] = (wchar_t) '*';
-	wide_directory_name[ wide_directory_name_size - 1 ] = 0;
+	system_directory_name[ system_directory_name_size - 2 ] = (system_character_t) '*';
+	system_directory_name[ system_directory_name_size - 1 ] = 0;
 
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	/* Cannot use FindFirstFileA here because it requires a narrow version of WIN32_FIND_DATA
 	 */
 	internal_directory->handle = FindFirstFileW(
-	                              (LPCWSTR) wide_directory_name,
+	                              (LPCWSTR) system_directory_name,
 	                              &( internal_first_directory_entry->find_data ) );
 #else
-	narrow_directory_name_size = directory_name_size;
-
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( ( directory_name_size < 3 )
-	 || ( directory_name[ directory_name_size - 2 ] == '\\' ) )
-	{
-		narrow_directory_name_size += 1;
-	}
-	narrow_directory_name_size += 1;
-
-	narrow_directory_name = narrow_string_allocate(
-	                         narrow_directory_name_size );
-
-	if( narrow_directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create narrow character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	if( narrow_string_copy(
-	     narrow_directory_name,
-	     directory_name,
-	     directory_name_size ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory name.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] != '\\' )
-	{
-		narrow_directory_name[ narrow_directory_name_size - 3 ] = (char) '\\';
-	}
-	narrow_directory_name[ narrow_directory_name_size - 2 ] = (char) '*';
-	narrow_directory_name[ narrow_directory_name_size - 1 ] = 0;
-
 	internal_directory->handle = FindFirstFileA(
-	                              (LPCSTR) narrow_directory_name,
+	                              (LPCSTR) system_directory_name,
 	                              &( internal_first_directory_entry->find_data ) );
 #endif
 	if( internal_directory->handle == INVALID_HANDLE_VALUE )
@@ -494,33 +369,17 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	memory_free(
-	 wide_directory_name );
+	 system_directory_name );
 
-	wide_directory_name = NULL;
-#else
-	memory_free(
-	 narrow_directory_name );
-
-	narrow_directory_name = NULL;
-#endif
 	return( 1 );
 
 on_error:
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	if( wide_directory_name != NULL )
+	if( system_directory_name != NULL )
 	{
 		memory_free(
-		 wide_directory_name );
+		 system_directory_name );
 	}
-#else
-	if( narrow_directory_name != NULL )
-	{
-		memory_free(
-		 narrow_directory_name );
-	}
-#endif
 	if( internal_directory->first_entry != NULL )
 	{
 		libcdirectory_directory_entry_free(
@@ -621,18 +480,11 @@ int libcdirectory_directory_open_wide(
 {
 	libcdirectory_internal_directory_t *internal_directory                   = NULL;
 	libcdirectory_internal_directory_entry_t *internal_first_directory_entry = NULL;
+	system_character_t *system_directory_name                                = NULL;
 	static char *function                                                    = "libcdirectory_directory_open_wide";
-	size_t directory_name_size                                               = 0;
+	size_t directory_name_length                                             = 0;
+	size_t system_directory_name_size                                        = 0;
 	DWORD error_code                                                         = 0;
-
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	wchar_t *wide_directory_name                                             = NULL;
-	size_t wide_directory_name_size                                          = 0;
-#else
-	char *narrow_directory_name                                              = NULL;
-	size_t narrow_directory_name_size                                        = 0;
-	int result                                                               = 0;
-#endif
 
 	if( directory == NULL )
 	{
@@ -706,200 +558,82 @@ int libcdirectory_directory_open_wide(
 	}
 	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
 
-	directory_name_size = 1 + wide_string_length(
-	                           directory_name );
+	directory_name_length = wide_string_length(
+	                         directory_name );
+
+	if( libcdirectory_system_string_size_from_wide_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &system_directory_name_size,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
+		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 "%s: unable to determine system character directory name size.",
+		 function );
+
+		goto on_error;
+	}
+	/* Find files requires a search path, add a \ and * if necessary
+	 */
+	if( ( directory_name_length < 2 )
+	 || ( directory_name[ directory_name_length - 1 ] == (wchar_t) '\\' ) )
+	{
+		system_directory_name_size += 1;
+	}
+	system_directory_name_size += 1;
+
+	system_directory_name = system_string_allocate(
+	                         system_directory_name_size );
+
+	if( system_directory_name == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+		 "%s: unable to create system character directory name.",
+		 function );
+
+		goto on_error;
+	}
+	if( libcdirectory_system_string_copy_from_wide_string(
+	     system_directory_name,
+	     system_directory_name_size,
+	     directory_name,
+	     directory_name_length + 1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
+		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 "%s: unable to set system character directory name.",
+		 function );
+
+		goto on_error;
+	}
+	/* Find files requires a search path, add a \ and * if necessary
+	 */
+	if( ( directory_name_length < 2 )
+	 || ( directory_name[ directory_name_length - 1 ] == (wchar_t) '\\' ) )
+	{
+		system_directory_name[ system_directory_name_size - 3 ] = (system_character_t) '\\';
+	}
+	system_directory_name[ system_directory_name_size - 2 ] = (system_character_t) '*';
+	system_directory_name[ system_directory_name_size - 1 ] = 0;
 
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	wide_directory_name_size = directory_name_size;
-
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( ( directory_name_size < 3 )
-	 || ( directory_name[ directory_name_size - 2 ] == (wchar_t) '\\' ) )
-	{
-		wide_directory_name_size += 1;
-	}
-	wide_directory_name_size += 1;
-
-	wide_directory_name = wide_string_allocate(
-	                       wide_directory_name_size );
-
-	if( wide_directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create wide character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	if( wide_string_copy(
-	     wide_directory_name,
-	     directory_name,
-	     directory_name_size ) == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory name.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] != (wchar_t) '\\' )
-	{
-		wide_directory_name[ wide_directory_name_size - 3 ] = (wchar_t) '\\';
-	}
-	wide_directory_name[ wide_directory_name_size - 2 ] = (wchar_t) '*';
-	wide_directory_name[ wide_directory_name_size - 1 ] = 0;
-
 	internal_directory->handle = FindFirstFileW(
-	                              (LPCWSTR) wide_directory_name,
+	                              (LPCWSTR) system_directory_name,
 	                              &( internal_first_directory_entry->find_data ) );
 #else
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to determine narrow character directory name size.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( ( directory_name_size < 3 )
-	 || ( directory_name[ directory_name_size - 2 ] == (wchar_t) '\\' ) )
-	{
-		narrow_directory_name_size += 1;
-	}
-	narrow_directory_name_size += 1;
-
-	narrow_directory_name = narrow_string_allocate(
-	                         narrow_directory_name_size );
-
-	if( narrow_directory_name == NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create narrow character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_copy_from_utf32(
-		          (libuna_utf8_character_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_copy_from_utf16(
-		          (libuna_utf8_character_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_copy_from_utf32(
-		          (uint8_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_copy_from_utf16(
-		          (uint8_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to set narrow character directory name.",
-		 function );
-
-		goto on_error;
-	}
-	/* Find files requires a search path, add a \ and * if necessary
-	 */
-	if( directory_name[ directory_name_size - 2 ] != (wchar_t) '\\' )
-	{
-		narrow_directory_name[ narrow_directory_name_size - 3 ] = (char) '\\';
-	}
-	narrow_directory_name[ narrow_directory_name_size - 2 ] = (char) '*';
-	narrow_directory_name[ narrow_directory_name_size - 1 ] = 0;
-
 	/* Cannot use FindFirstFileW here because it requires a wide version of WIN32_FIND_DATA
 	 */
 	internal_directory->handle = FindFirstFileA(
-	                              (LPCSTR) narrow_directory_name,
+	                              (LPCSTR) system_directory_name,
 	                              &( internal_first_directory_entry->find_data ) );
 #endif
 	if( internal_directory->handle == INVALID_HANDLE_VALUE )
@@ -916,33 +650,17 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	memory_free(
-	 wide_directory_name );
+	 system_directory_name );
 
-	wide_directory_name = NULL;
-#else
-	memory_free(
-	 narrow_directory_name );
-
-	narrow_directory_name = NULL;
-#endif
 	return( 1 );
 
 on_error:
-#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	if( wide_directory_name != NULL )
+	if( system_directory_name != NULL )
 	{
 		memory_free(
-		 wide_directory_name );
+		 system_directory_name );
 	}
-#else
-	if( narrow_directory_name != NULL )
-	{
-		memory_free(
-		 narrow_directory_name );
-	}
-#endif
 	if( internal_directory->first_entry != NULL )
 	{
 		libcdirectory_directory_entry_free(
@@ -970,10 +688,9 @@ int libcdirectory_directory_open_wide(
 {
 	libcdirectory_internal_directory_t *internal_directory = NULL;
 	static char *function                                  = "libcdirectory_directory_open_wide";
-	char *narrow_directory_name                            = NULL;
-	size_t directory_name_size                             = 0;
-	size_t narrow_directory_name_size                      = 0;
-	int result                                             = 0;
+	char *system_directory_name                            = NULL;
+	size_t directory_name_length                           = 0;
+	size_t system_directory_name_size                      = 0;
 
 	if( directory == NULL )
 	{
@@ -1010,127 +727,56 @@ int libcdirectory_directory_open_wide(
 
 		return( -1 );
 	}
-	directory_name_size = 1 + wide_string_length(
-	                           directory_name );
+	directory_name_length = wide_string_length(
+	                         directory_name );
 
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_size_from_utf32(
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_size_from_utf16(
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          libclocale_codepage,
-		          &narrow_directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_size_from_wide_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &system_directory_name_size,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
 		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to determine narrow character directory name size.",
+		 "%s: unable to determine system character directory name size.",
 		 function );
 
 		goto on_error;
 	}
-	narrow_directory_name = narrow_string_allocate(
-	                         narrow_directory_name_size );
+	system_directory_name = system_string_allocate(
+	                         system_directory_name_size );
 
-	if( narrow_directory_name == NULL )
+	if( system_directory_name == NULL )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_MEMORY,
 		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create narrow character directory name.",
+		 "%s: unable to create system character directory name.",
 		 function );
 
 		goto on_error;
 	}
-	if( libclocale_codepage == 0 )
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_utf8_string_copy_from_utf32(
-		          (libuna_utf8_character_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_utf8_string_copy_from_utf16(
-		          (libuna_utf8_character_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	else
-	{
-#if SIZEOF_WCHAR_T == 4
-		result = libuna_byte_stream_copy_from_utf32(
-		          (uint8_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf32_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#elif SIZEOF_WCHAR_T == 2
-		result = libuna_byte_stream_copy_from_utf16(
-		          (uint8_t *) narrow_directory_name,
-		          narrow_directory_name_size,
-		          libclocale_codepage,
-		          (libuna_utf16_character_t *) directory_name,
-		          directory_name_size,
-		          error );
-#else
-#error Unsupported size of wchar_t
-#endif /* SIZEOF_WCHAR_T */
-	}
-	if( result != 1 )
+	if( libcdirectory_system_string_copy_from_wide_string(
+	     system_directory_name,
+	     system_directory_name_size,
+	     directory_name,
+	     directory_name_length + 1,
+	     error ) != 1 )
 	{
 		libcerror_error_set(
 		 error,
 		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
 		 LIBCERROR_CONVERSION_ERROR_GENERIC,
-		 "%s: unable to set narrow character directory name.",
+		 "%s: unable to set system character directory name.",
 		 function );
 
 		goto on_error;
 	}
 	internal_directory->stream = opendir(
-	                              narrow_directory_name );
+	                              system_directory_name );
 
 	if( internal_directory->stream == NULL )
 	{
@@ -1145,17 +791,17 @@ int libcdirectory_directory_open_wide(
 		goto on_error;
 	}
 	memory_free(
-	 narrow_directory_name );
+	 system_directory_name );
 
-	narrow_directory_name = NULL;
+	system_directory_name = NULL;
 
 	return( 1 );
 
 on_error:
-	if( narrow_directory_name != NULL )
+	if( system_directory_name != NULL )
 	{
 		memory_free(
-		 narrow_directory_name );
+		 system_directory_name );
 	}
 	return( -1 );
 }

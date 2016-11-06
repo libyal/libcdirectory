@@ -190,6 +190,10 @@
 				>
 			</File>
 			<File
+				RelativePath="..\..\libcdirectory\libcdirectory_system_string.c"
+				>
+			</File>
+			<File
 				RelativePath="..\..\libcdirectory\libcdirectory_wide_string.c"
 				>
 			</File>
@@ -233,6 +237,10 @@
 			</File>
 			<File
 				RelativePath="..\..\libcdirectory\libcdirectory_support.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\libcdirectory\libcdirectory_system_string.h"
 				>
 			</File>
 			<File
