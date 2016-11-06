@@ -1,8 +1,11 @@
 TODO:
-* libcstring macros changes and add fallback for libcstring_wide_string_compare_no_case
 * Add WINVER < 0x0500 support
 * change libcdirectory_directory_has_entry(_wide) to not require explicit
   open/close directory before usage
+
+20161106
+* worked on tests
+* bug fixes in WINAPI support
 
 20160824
 * worked on tests

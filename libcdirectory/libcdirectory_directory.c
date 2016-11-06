@@ -52,6 +52,7 @@
 #include "libcdirectory_libclocale.h"
 #include "libcdirectory_libuna.h"
 #include "libcdirectory_types.h"
+#include "libcdirectory_wide_string.h"
 
 /* Creates a directory
  * Make sure the value directory is referencing, is set to NULL
@@ -338,7 +339,8 @@ int libcdirectory_directory_open(
 	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( directory_name[ directory_name_size - 2 ] != '\\' )
+	if( ( directory_name_size < 3 )
+	 || ( directory_name[ directory_name_size - 2 ] != '\\' ) )
 	{
 		wide_directory_name_size += 1;
 	}
@@ -430,7 +432,8 @@ int libcdirectory_directory_open(
 
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( directory_name[ directory_name_size - 2 ] == '\\' )
+	if( ( directory_name_size < 3 )
+	 || ( directory_name[ directory_name_size - 2 ] == '\\' ) )
 	{
 		narrow_directory_name_size += 1;
 	}
@@ -711,7 +714,8 @@ int libcdirectory_directory_open_wide(
 
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( directory_name[ directory_name_size - 2 ] == '\\' )
+	if( ( directory_name_size < 3 )
+	 || ( directory_name[ directory_name_size - 2 ] == (wchar_t) '\\' ) )
 	{
 		wide_directory_name_size += 1;
 	}
@@ -809,7 +813,8 @@ int libcdirectory_directory_open_wide(
 	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
-	if( directory_name[ directory_name_size - 2 ] != (wchar_t) '\\' )
+	if( ( directory_name_size < 3 )
+	 || ( directory_name[ directory_name_size - 2 ] == (wchar_t) '\\' ) )
 	{
 		narrow_directory_name_size += 1;
 	}

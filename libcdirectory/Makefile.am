@@ -19,7 +19,8 @@ libcdirectory_la_SOURCES = \
 	libcdirectory_libuna.h \
 	libcdirectory_support.c libcdirectory_support.h \
 	libcdirectory_types.h \
-	libcdirectory_unused.h
+	libcdirectory_unused.h \
+	libcdirectory_wide_string.c libcdirectory_wide_string.h
 
 libcdirectory_la_LIBADD = \
 	@LIBCERROR_LIBADD@ \
