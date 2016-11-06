@@ -29,6 +29,7 @@
 #endif
 
 #include "cdirectory_test_libcdirectory.h"
+#include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_macros.h"
 #include "cdirectory_test_unused.h"
 
@@ -59,6 +60,109 @@ on_error:
 	return( 0 );
 }
 
+/* Tests the libcdirectory_get_codepage function
+ * Returns 1 if successful or 0 if not
+ */
+int cdirectory_test_get_codepage(
+     void )
+{
+	libcerror_error_t *error = NULL;
+	int codepage             = 0;
+	int result               = 0;
+
+	result = libcdirectory_get_codepage(
+	          &codepage,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	/* Test error cases
+	 */
+	result = libcdirectory_get_codepage(
+	          NULL,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+         "error",
+         error );
+
+	libcerror_error_free(
+	 &error );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	return( 0 );
+}
+
+/* Tests the libcdirectory_set_codepage function
+ * Returns 1 if successful or 0 if not
+ */
+int cdirectory_test_set_codepage(
+     void )
+{
+	libcerror_error_t *error = NULL;
+	int result               = 0;
+
+	result = libcdirectory_set_codepage(
+	          0,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NULL(
+         "error",
+         error );
+
+	/* Test error cases
+	 */
+	result = libcdirectory_set_codepage(
+	          -1,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+         "error",
+         error );
+
+	libcerror_error_free(
+	 &error );
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	return( 0 );
+}
+
 /* The main program
  */
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
@@ -77,6 +181,14 @@ int main(
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_get_version",
 	 cdirectory_test_get_version );
+
+	CDIRECTORY_TEST_RUN(
+	 "libcdirectory_get_codepage",
+	 cdirectory_test_get_codepage );
+
+	CDIRECTORY_TEST_RUN(
+	 "libcdirectory_set_codepage",
+	 cdirectory_test_set_codepage );
 
 	return( EXIT_SUCCESS );
 

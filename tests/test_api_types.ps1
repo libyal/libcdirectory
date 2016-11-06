@@ -1,6 +1,6 @@
 # Library API type testing script
 #
-# Version: 20161106
+# Version: 20161107
 
 $ExitSuccess = 0
 $ExitFailure = 1
@@ -10,7 +10,8 @@ $TestPrefix = Split-Path -path ${Pwd}.Path -parent
 $TestPrefix = Split-Path -path ${TestPrefix} -leaf
 $TestPrefix = ${TestPrefix}.Substring(3)
 
-$TestTypes = "directory directory_entry" -split " "
+$TestTypes = "directory directory_entry"
+$TestTypes = ${TestTypes} -split " "
 
 $TestToolDirectory = "..\msvscpp\Release"
 

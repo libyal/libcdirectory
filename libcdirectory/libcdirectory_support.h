@@ -26,6 +26,7 @@
 #include <types.h>
 
 #include "libcdirectory_extern.h"
+#include "libcdirectory_libcerror.h"
 
 #if defined( __cplusplus )
 extern "C" {
@@ -36,6 +37,16 @@ extern "C" {
 LIBCDIRECTORY_EXTERN \
 const char *libcdirectory_get_version(
              void );
+
+LIBCDIRECTORY_EXTERN \
+int libcdirectory_get_codepage(
+     int *codepage,
+     libcerror_error_t **error );
+
+LIBCDIRECTORY_EXTERN \
+int libcdirectory_set_codepage(
+     int codepage,
+     libcerror_error_t **error );
 
 #endif /* !defined( HAVE_LOCAL_LIBCDIRECTORY ) */
 

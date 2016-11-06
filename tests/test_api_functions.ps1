@@ -1,6 +1,6 @@
 # Library API functions testing script
 #
-# Version: 20161106
+# Version: 20161107
 
 $ExitSuccess = 0
 $ExitFailure = 1
@@ -10,7 +10,8 @@ $TestPrefix = Split-Path -path ${Pwd}.Path -parent
 $TestPrefix = Split-Path -path ${TestPrefix} -leaf
 $TestPrefix = ${TestPrefix}.Substring(3)
 
-$TestFunctions = "error support" -split " "
+$TestFunctions = "error support"
+$TestFunctions = ${TestFunctions} -split " "
 
 $TestToolDirectory = "..\msvscpp\Release"
 

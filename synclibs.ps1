@@ -1,9 +1,10 @@
 # Script that synchronizes the local library dependencies
 #
-# Version: 20161106
+# Version: 20161107
 
 $GitUrlPrefix = "https://github.com/libyal"
-$LocalLibs = "libcerror libclocale libuna" -split " "
+$LocalLibs = "libcerror libclocale libuna"
+$LocalLibs = ${LocalLibs} -split " "
 
 foreach (${LocalLib} in ${LocalLibs})
 {
