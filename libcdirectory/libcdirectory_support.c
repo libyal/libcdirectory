@@ -23,8 +23,6 @@
 #include <types.h>
 
 #include "libcdirectory_definitions.h"
-#include "libcdirectory_libcerror.h"
-#include "libcdirectory_libcstring.h"
 #include "libcdirectory_support.h"
 
 #if !defined( HAVE_LOCAL_LIBCDIRECTORY )

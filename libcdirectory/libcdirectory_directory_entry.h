@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_ENTRY_H )
-#define _LIBCDIRECTORY_INTERNAL_DIRECTORY_ENTRY_H
+#if !defined( _LIBCDIRECTORY_DIRECTORY_ENTRY_H )
+#define _LIBCDIRECTORY_DIRECTORY_ENTRY_H
 
 #include <common.h>
 #include <types.h>
@@ -43,7 +43,6 @@
 
 #include "libcdirectory_extern.h"
 #include "libcdirectory_libcerror.h"
-#include "libcdirectory_libcstring.h"
 #include "libcdirectory_types.h"
 
 #if defined( __cplusplus )
@@ -57,13 +56,11 @@ struct libcdirectory_internal_directory_entry
 {
 	WIN32_FIND_DATA find_data;
 
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	char *narrow_name;
 #else
 	wchar_t *wide_name;
 #endif
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 };
 
 #elif defined( HAVE_DIRENT_H )
@@ -71,16 +68,14 @@ struct libcdirectory_internal_directory_entry
 {
 	struct dirent entry;
 
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	char *narrow_name;
 #else
 	wchar_t *wide_name;
 #endif
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 };
 
-#endif
+#endif /* defined( WINAPI ) */
 
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_entry_initialize(
@@ -123,5 +118,5 @@ int libcdirectory_directory_entry_get_name_wide(
 }
 #endif
 
-#endif /* !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_ENTRY_H ) */
+#endif /* !defined( _LIBCDIRECTORY_DIRECTORY_ENTRY_H ) */
 

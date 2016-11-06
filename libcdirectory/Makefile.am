@@ -1,7 +1,6 @@
 AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
-	@LIBCSTRING_CPPFLAGS@ \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCLOCALE_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@
@@ -17,14 +16,12 @@ libcdirectory_la_SOURCES = \
 	libcdirectory_directory_entry.c libcdirectory_directory_entry.h \
 	libcdirectory_libcerror.h \
 	libcdirectory_libclocale.h \
-	libcdirectory_libcstring.h \
 	libcdirectory_libuna.h \
 	libcdirectory_support.c libcdirectory_support.h \
 	libcdirectory_types.h \
 	libcdirectory_unused.h
 
 libcdirectory_la_LIBADD = \
-	@LIBCSTRING_LIBADD@ \
 	@LIBCERROR_LIBADD@ \
 	@LIBCLOCALE_LIBADD@ \
 	@LIBUNA_LIBADD@

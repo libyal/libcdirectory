@@ -21,7 +21,9 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_ERRNO_H ) || defined( WINAPI )
 #include <errno.h>
@@ -48,7 +50,6 @@
 #include "libcdirectory_directory_entry.h"
 #include "libcdirectory_libcerror.h"
 #include "libcdirectory_libclocale.h"
-#include "libcdirectory_libcstring.h"
 #include "libcdirectory_libuna.h"
 #include "libcdirectory_types.h"
 
@@ -201,7 +202,7 @@ int libcdirectory_directory_open(
 	size_t directory_name_size                                               = 0;
 	DWORD error_code                                                         = 0;
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	wchar_t *wide_directory_name                                             = NULL;
 	size_t wide_directory_name_size                                          = 0;
 	int result                                                               = 0;
@@ -282,10 +283,10 @@ int libcdirectory_directory_open(
 	}
 	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
 
-	directory_name_size = 1 + libcstring_narrow_string_length(
+	directory_name_size = 1 + narrow_string_length(
 	                           directory_name );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( libclocale_codepage == 0 )
 	{
 #if SIZEOF_WCHAR_T == 4
@@ -343,7 +344,7 @@ int libcdirectory_directory_open(
 	}
 	wide_directory_name_size += 1;
 
-	wide_directory_name = libcstring_wide_string_allocate(
+	wide_directory_name = wide_string_allocate(
 	                       wide_directory_name_size );
 
 	if( wide_directory_name == NULL )
@@ -435,7 +436,7 @@ int libcdirectory_directory_open(
 	}
 	narrow_directory_name_size += 1;
 
-	narrow_directory_name = libcstring_narrow_string_allocate(
+	narrow_directory_name = narrow_string_allocate(
 	                         narrow_directory_name_size );
 
 	if( narrow_directory_name == NULL )
@@ -449,7 +450,7 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
-	if( libcstring_narrow_string_copy(
+	if( narrow_string_copy(
 	     narrow_directory_name,
 	     directory_name,
 	     directory_name_size ) == NULL )
@@ -490,7 +491,7 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	memory_free(
 	 wide_directory_name );
 
@@ -504,7 +505,7 @@ int libcdirectory_directory_open(
 	return( 1 );
 
 on_error:
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( wide_directory_name != NULL )
 	{
 		memory_free(
@@ -621,7 +622,7 @@ int libcdirectory_directory_open_wide(
 	size_t directory_name_size                                               = 0;
 	DWORD error_code                                                         = 0;
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	wchar_t *wide_directory_name                                             = NULL;
 	size_t wide_directory_name_size                                          = 0;
 #else
@@ -702,10 +703,10 @@ int libcdirectory_directory_open_wide(
 	}
 	internal_first_directory_entry = (libcdirectory_internal_directory_entry_t *) internal_directory->first_entry;
 
-	directory_name_size = 1 + libcstring_wide_string_length(
+	directory_name_size = 1 + wide_string_length(
 	                           directory_name );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	wide_directory_name_size = directory_name_size;
 
 	/* Find files requires a search path, add a \ and * if necessary
@@ -716,7 +717,7 @@ int libcdirectory_directory_open_wide(
 	}
 	wide_directory_name_size += 1;
 
-	wide_directory_name = libcstring_wide_string_allocate(
+	wide_directory_name = wide_string_allocate(
 	                       wide_directory_name_size );
 
 	if( wide_directory_name == NULL )
@@ -730,7 +731,7 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
-	if( libcstring_wide_string_copy(
+	if( wide_string_copy(
 	     wide_directory_name,
 	     directory_name,
 	     directory_name_size ) == NULL )
@@ -814,7 +815,7 @@ int libcdirectory_directory_open_wide(
 	}
 	narrow_directory_name_size += 1;
 
-	narrow_directory_name = libcstring_narrow_string_allocate(
+	narrow_directory_name = narrow_string_allocate(
 	                         narrow_directory_name_size );
 
 	if( narrow_directory_name == NULL )
@@ -910,7 +911,7 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	memory_free(
 	 wide_directory_name );
 
@@ -924,7 +925,7 @@ int libcdirectory_directory_open_wide(
 	return( 1 );
 
 on_error:
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( wide_directory_name != NULL )
 	{
 		memory_free(
@@ -1004,7 +1005,7 @@ int libcdirectory_directory_open_wide(
 
 		return( -1 );
 	}
-	directory_name_size = 1 + libcstring_wide_string_length(
+	directory_name_size = 1 + wide_string_length(
 	                           directory_name );
 
 	if( libclocale_codepage == 0 )
@@ -1056,7 +1057,7 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
-	narrow_directory_name = libcstring_narrow_string_allocate(
+	narrow_directory_name = narrow_string_allocate(
 	                         narrow_directory_name_size );
 
 	if( narrow_directory_name == NULL )
@@ -1367,8 +1368,7 @@ int libcdirectory_directory_read_entry(
 	}
 	else
 	{
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( internal_directory_entry->narrow_name != NULL )
 		{
 			memory_free(
@@ -1384,8 +1384,8 @@ int libcdirectory_directory_read_entry(
 
 			internal_directory_entry->wide_name = NULL;
 		}
-#endif
-#endif
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
+
 		if( FindNextFile(
 		     internal_directory->handle,
 		     &( internal_directory_entry->find_data ) ) == 0 )
@@ -1471,8 +1471,7 @@ int libcdirectory_directory_read_entry(
 
 		return( -1 );
 	}
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( internal_directory_entry->narrow_name != NULL )
 	{
 		memory_free(
@@ -1488,8 +1487,8 @@ int libcdirectory_directory_read_entry(
 
 		internal_directory_entry->wide_name = NULL;
 	}
-#endif
-#endif
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
+
 	result = readdir_r(
 	          internal_directory->stream,
 	          &( internal_directory_entry->entry ),
@@ -1678,14 +1677,14 @@ int libcdirectory_directory_has_entry(
 
 				goto on_error;
 			}
-			search_directory_entry_name_length = libcstring_narrow_string_length(
+			search_directory_entry_name_length = narrow_string_length(
 			                                      search_directory_entry_name );
 
 			if( search_directory_entry_name_length == entry_name_length )
 			{
 				/* If there is an exact match we're done searching
 				 */
-				match = libcstring_narrow_string_compare(
+				match = narrow_string_compare(
 					 search_directory_entry_name,
 					 entry_name,
 					 entry_name_length );
@@ -1715,7 +1714,7 @@ int libcdirectory_directory_has_entry(
 				if( ( ( compare_flags & LIBCDIRECTORY_COMPARE_FLAG_NO_CASE ) != 0 )
 				 && ( entry_found == 0 ) )
 				{
-					match = libcstring_narrow_string_compare_no_case(
+					match = narrow_string_compare_no_case(
 						 search_directory_entry_name,
 						 entry_name,
 						 entry_name_length );
@@ -1931,14 +1930,14 @@ int libcdirectory_directory_has_entry_wide(
 
 				goto on_error;
 			}
-			search_directory_entry_name_length = libcstring_wide_string_length(
+			search_directory_entry_name_length = wide_string_length(
 			                                      search_directory_entry_name );
 
 			if( search_directory_entry_name_length == entry_name_length )
 			{
 				/* If there is an exact match we're done searching
 				 */
-				match = libcstring_wide_string_compare(
+				match = wide_string_compare(
 					 search_directory_entry_name,
 					 entry_name,
 					 entry_name_length );
@@ -1968,7 +1967,7 @@ int libcdirectory_directory_has_entry_wide(
 				if( ( ( compare_flags & LIBCDIRECTORY_COMPARE_FLAG_NO_CASE ) != 0 )
 				 && ( entry_found == 0 ) )
 				{
-					match = libcstring_wide_string_compare_no_case(
+					match = wide_string_compare_no_case(
 						 search_directory_entry_name,
 						 entry_name,
 						 entry_name_length );

@@ -6,7 +6,6 @@ MSVSCPP_FILES = \
 	libcdirectory/libcdirectory.vcproj \
 	libcerror/libcerror.vcproj \
 	libclocale/libclocale.vcproj \
-	libcstring/libcstring.vcproj \
 	libuna/libuna.vcproj \
 	libcdirectory.sln
 

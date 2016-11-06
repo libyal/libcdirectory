@@ -43,5 +43,5 @@ const char *libcdirectory_get_version(
 }
 #endif
 
-#endif
+#endif /* !defined( _LIBCDIRECTORY_SUPPORT_H ) */
 

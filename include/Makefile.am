@@ -2,7 +2,6 @@ include_HEADERS = \
 	libcdirectory.h
 
 pkginclude_HEADERS = \
-	libcdirectory/codepage.h \
 	libcdirectory/definitions.h \
 	libcdirectory/error.h \
 	libcdirectory/extern.h \

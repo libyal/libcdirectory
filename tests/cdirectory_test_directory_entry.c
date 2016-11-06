@@ -21,6 +21,9 @@
 
 #include <common.h>
 #include <file_stream.h>
+#include <narrow_string.h>
+#include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_STDLIB_H ) || defined( WINAPI )
 #include <stdlib.h>
@@ -28,7 +31,6 @@
 
 #include "cdirectory_test_libcdirectory.h"
 #include "cdirectory_test_libcerror.h"
-#include "cdirectory_test_libcstring.h"
 #include "cdirectory_test_macros.h"
 #include "cdirectory_test_memory.h"
 #include "cdirectory_test_unused.h"
@@ -565,7 +567,7 @@ int cdirectory_test_directory_entry_get_name(
          "error",
          error );
 
-	result = libcstring_narrow_string_compare(
+	result = narrow_string_compare(
 	          entry_name,
 	          "Makefile.am",
 	          11 );
@@ -698,7 +700,7 @@ int cdirectory_test_directory_entry_get_name_wide(
          "error",
          error );
 
-	result = libcstring_wide_string_compare(
+	result = wide_string_compare(
 	          entry_name,
 	          L"Makefile.am",
 	          11 );
@@ -781,7 +783,7 @@ on_error:
 
 /* The main program
  */
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 int wmain(
      int argc CDIRECTORY_TEST_ATTRIBUTE_UNUSED,
      wchar_t * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )

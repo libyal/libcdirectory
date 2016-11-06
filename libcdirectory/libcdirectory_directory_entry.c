@@ -21,7 +21,9 @@
 
 #include <common.h>
 #include <memory.h>
+#include <narrow_string.h>
 #include <types.h>
+#include <wide_string.h>
 
 #if defined( HAVE_ERRNO_H ) || defined( WINAPI )
 #include <errno.h>
@@ -47,7 +49,6 @@
 #include "libcdirectory_directory_entry.h"
 #include "libcdirectory_libcerror.h"
 #include "libcdirectory_libclocale.h"
-#include "libcdirectory_libcstring.h"
 #include "libcdirectory_libuna.h"
 #include "libcdirectory_types.h"
 
@@ -151,8 +152,7 @@ int libcdirectory_directory_entry_free(
 		internal_directory_entry = (libcdirectory_internal_directory_entry_t *) *directory_entry;
 		*directory_entry         = NULL;
 
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( internal_directory_entry->narrow_name != NULL )
 		{
 			memory_free(
@@ -164,8 +164,7 @@ int libcdirectory_directory_entry_free(
 			memory_free(
 			 internal_directory_entry->wide_name );
 		}
-#endif
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 		memory_free(
 		 internal_directory_entry );
 	}
@@ -237,13 +236,12 @@ int libcdirectory_directory_entry_copy(
 
 		return( -1 );
 	}
-#if defined( HAVE_WIDE_CHARACTER_TYPE )
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
         /* TODO copy narrow_name */
 #else
         /* TODO copy wide_name */
-#endif
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
+
+#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
 	return( 1 );
 }
@@ -410,7 +408,7 @@ int libcdirectory_directory_entry_get_name(
 	libcdirectory_internal_directory_entry_t *internal_directory_entry = NULL;
 	static char *function                                              = "libcdirectory_directory_entry_get_name";
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	const wchar_t *directory_name                                      = NULL;
 	size_t directory_name_size                                         = 0;
 	size_t narrow_directory_name_size                                  = 0;
@@ -441,10 +439,10 @@ int libcdirectory_directory_entry_get_name(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	directory_name = internal_directory_entry->find_data.cFileName;
 
-	directory_name_size = 1 + libcstring_wide_string_length(
+	directory_name_size = 1 + wide_string_length(
 	                           directory_name );
 
 	if( libclocale_codepage == 0 )
@@ -496,7 +494,7 @@ int libcdirectory_directory_entry_get_name(
 
 		goto on_error;
 	}
-	internal_directory_entry->narrow_name = libcstring_narrow_string_allocate(
+	internal_directory_entry->narrow_name = narrow_string_allocate(
 	                                         narrow_directory_name_size );
 
 	if( internal_directory_entry->narrow_name == NULL )
@@ -569,7 +567,7 @@ int libcdirectory_directory_entry_get_name(
 #endif
 	return( 1 );
 
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 on_error:
 	if( internal_directory_entry->narrow_name != NULL )
 	{
@@ -650,7 +648,7 @@ int libcdirectory_directory_entry_get_name_wide(
 	libcdirectory_internal_directory_entry_t *internal_directory_entry = NULL;
 	static char *function                                              = "libcdirectory_directory_entry_get_name_wide";
 
-#if !defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	const char *directory_name                                         = NULL;
 	size_t directory_name_size                                         = 0;
 	size_t wide_directory_name_size                                    = 0;
@@ -681,12 +679,12 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		return( -1 );
 	}
-#if defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	*name = internal_directory_entry->find_data.cFileName;
 #else
 	directory_name = internal_directory_entry->find_data.cFileName;
 
-	directory_name_size = 1 + libcstring_narrow_string_length(
+	directory_name_size = 1 + narrow_string_length(
 	                           directory_name );
 
 	if( libclocale_codepage == 0 )
@@ -738,7 +736,7 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		goto on_error;
 	}
-	internal_directory_entry->wide_name = libcstring_wide_string_allocate(
+	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );
 
 	if( internal_directory_entry->wide_name == NULL )
@@ -809,7 +807,7 @@ int libcdirectory_directory_entry_get_name_wide(
 #endif
 	return( 1 );
 
-#if !defined( LIBCSTRING_HAVE_WIDE_SYSTEM_CHARACTER )
+#if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
 on_error:
 	if( internal_directory_entry->wide_name != NULL )
 	{
@@ -868,7 +866,7 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		return( -1 );
 	}
-	directory_name_size = 1 + libcstring_narrow_string_length(
+	directory_name_size = 1 + narrow_string_length(
 	                           internal_directory_entry->entry.d_name );
 
 	if( libclocale_codepage == 0 )
@@ -920,7 +918,7 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		goto on_error;
 	}
-	internal_directory_entry->wide_name = libcstring_wide_string_allocate(
+	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );
 
 	if( internal_directory_entry->wide_name == NULL )

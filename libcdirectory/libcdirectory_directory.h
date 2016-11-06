@@ -19,8 +19,8 @@
  * along with this software.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#if !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_H )
-#define _LIBCDIRECTORY_INTERNAL_DIRECTORY_H
+#if !defined( _LIBCDIRECTORY_DIRECTORY_H )
+#define _LIBCDIRECTORY_DIRECTORY_H
 
 #include <common.h>
 #include <types.h>
@@ -32,7 +32,6 @@
 #include "libcdirectory_directory_entry.h"
 #include "libcdirectory_extern.h"
 #include "libcdirectory_libcerror.h"
-#include "libcdirectory_libcstring.h"
 #include "libcdirectory_types.h"
 
 #if defined( __cplusplus )
@@ -122,5 +121,5 @@ int libcdirectory_directory_has_entry_wide(
 }
 #endif
 
-#endif /* !defined( _LIBCDIRECTORY_INTERNAL_DIRECTORY_H ) */
+#endif /* !defined( _LIBCDIRECTORY_DIRECTORY_H ) */
 
