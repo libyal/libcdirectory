@@ -24,11 +24,11 @@
 
 #include <libcdirectory/types.h>
 
-#define LIBCDIRECTORY_VERSION				@VERSION@
+#define LIBCDIRECTORY_VERSION			@VERSION@
 
 /* The libcdirectory version string
  */
-#define LIBCDIRECTORY_VERSION_STRING			"@VERSION@"
+#define LIBCDIRECTORY_VERSION_STRING		"@VERSION@"
 
 /* The directory entry type definitions
  */
@@ -47,7 +47,7 @@ enum LIBCDIRECTORY_ENTRY_TYPES
  */
 enum LIBCDIRECTORY_COMPARE_FLAGS
 {
-	LIBCDIRECTORY_COMPARE_FLAG_NO_CASE		= 0x01
+	LIBCDIRECTORY_COMPARE_FLAG_NO_CASE	= 0x01
 };
 
 #endif /* !defined( _LIBCDIRECTORY_DEFINITIONS_H ) */
