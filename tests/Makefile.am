@@ -2,6 +2,8 @@ AM_CPPFLAGS = \
 	-I$(top_srcdir)/include \
 	-I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
+	@LIBCLOCALE_CPPFLAGS@ \
+	@LIBUNA_CPPFLAGS@ \
 	@LIBCDIRECTORY_DLL_IMPORT@
 
 TESTS = \

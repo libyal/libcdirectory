@@ -1,7 +1,7 @@
 /*
- * Library directory entry type testing program
+ * Library directory entry type test program
  *
- * Copyright (C) 2008-2016, Joachim Metz <joachim.metz@gmail.com>
+ * Copyright (C) 2008-2017, Joachim Metz <joachim.metz@gmail.com>
  *
  * Refer to AUTHORS for acknowledgements.
  *
@@ -55,7 +55,13 @@ int cdirectory_test_directory_entry_initialize(
 	libcerror_error_t *error                         = NULL;
 	int result                                       = 0;
 
-	/* Test libcdirectory_directory_entry_initialize
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
+	int number_of_malloc_fail_tests                  = 1;
+	int number_of_memset_fail_tests                  = 1;
+	int test_number                                  = 0;
+#endif
+
+	/* Test regular cases
 	 */
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
@@ -131,65 +137,89 @@ int cdirectory_test_directory_entry_initialize(
 
 #if defined( HAVE_CDIRECTORY_TEST_MEMORY )
 
-	/* Test libcdirectory_directory_entry_initialize with malloc failing
-	 */
-	cdirectory_test_malloc_attempts_before_fail = 0;
-
-	result = libcdirectory_directory_entry_initialize(
-	          &directory_entry,
-	          &error );
-
-	if( cdirectory_test_malloc_attempts_before_fail != -1 )
+	for( test_number = 0;
+	     test_number < number_of_malloc_fail_tests;
+	     test_number++ )
 	{
-		cdirectory_test_malloc_attempts_before_fail = -1;
+		/* Test libcdirectory_directory_entry_initialize with malloc failing
+		 */
+		cdirectory_test_malloc_attempts_before_fail = test_number;
+
+		result = libcdirectory_directory_entry_initialize(
+		          &directory_entry,
+		          &error );
+
+		if( cdirectory_test_malloc_attempts_before_fail != -1 )
+		{
+			cdirectory_test_malloc_attempts_before_fail = -1;
+
+			if( directory_entry != NULL )
+			{
+				libcdirectory_directory_entry_free(
+				 &directory_entry,
+				 NULL );
+			}
+		}
+		else
+		{
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "directory_entry",
+			 directory_entry );
+
+			CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
+
+			libcerror_error_free(
+			 &error );
+		}
 	}
-	else
+	for( test_number = 0;
+	     test_number < number_of_memset_fail_tests;
+	     test_number++ )
 	{
-		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+		/* Test libcdirectory_directory_entry_initialize with memset failing
+		 */
+		cdirectory_test_memset_attempts_before_fail = test_number;
 
-		CDIRECTORY_TEST_ASSERT_IS_NULL(
-		 "directory_entry",
-		 directory_entry );
+		result = libcdirectory_directory_entry_initialize(
+		          &directory_entry,
+		          &error );
 
-		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
+		if( cdirectory_test_memset_attempts_before_fail != -1 )
+		{
+			cdirectory_test_memset_attempts_before_fail = -1;
 
-		libcerror_error_free(
-		 &error );
-	}
-	/* Test libcdirectory_directory_entry_initialize with memset failing
-	 */
-	cdirectory_test_memset_attempts_before_fail = 0;
+			if( directory_entry != NULL )
+			{
+				libcdirectory_directory_entry_free(
+				 &directory_entry,
+				 NULL );
+			}
+		}
+		else
+		{
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 -1 );
 
-	result = libcdirectory_directory_entry_initialize(
-	          &directory_entry,
-	          &error );
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "directory_entry",
+			 directory_entry );
 
-	if( cdirectory_test_memset_attempts_before_fail != -1 )
-	{
-		cdirectory_test_memset_attempts_before_fail = -1;
-	}
-	else
-	{
-		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
-		 "result",
-		 result,
-		 -1 );
+			CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+			 "error",
+			 error );
 
-		CDIRECTORY_TEST_ASSERT_IS_NULL(
-		 "directory_entry",
-		 directory_entry );
-
-		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-		 "error",
-		 error );
-
-		libcerror_error_free(
-		 &error );
+			libcerror_error_free(
+			 &error );
+		}
 	}
 #endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
 
