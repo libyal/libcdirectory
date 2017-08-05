@@ -245,7 +245,7 @@ int libcdirectory_directory_entry_copy(
 	return( 1 );
 }
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Retrieves the directory entry type
  * This function uses the WINAPI directory entry structure for Windows XP or later
@@ -305,7 +305,7 @@ int libcdirectory_directory_entry_get_type(
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI directory entry structure for Windows 2000 or earlier NOT implemented yet
+#error WINAPI directory entry structure for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_DIRENT_H )
 
@@ -393,7 +393,7 @@ int libcdirectory_directory_entry_get_type(
 #error Missing directory entry structure definition
 #endif
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Retrieves the directory entry name
  * This function uses the WINAPI directory entry structure for Windows XP or later
@@ -510,7 +510,7 @@ on_error:
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI directory entry structure for Windows 2000 or earlier NOT implemented yet
+#error WINAPI directory entry structure for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_DIRENT_H )
 
@@ -561,7 +561,7 @@ int libcdirectory_directory_entry_get_name(
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Retrieves the directory entry name
  * This function uses the WINAPI directory entry structure for Windows XP or later
@@ -678,7 +678,7 @@ on_error:
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI directory entry structure for Windows 2000 or earlier NOT implemented yet
+#error WINAPI directory entry structure for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_DIRENT_H )
 

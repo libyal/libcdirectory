@@ -186,7 +186,7 @@ int libcdirectory_directory_free(
 	return( result );
 }
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Opens a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -392,7 +392,7 @@ on_error:
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI open directory for Windows 2000 or earlier NOT implemented yet
+#error WINAPI open directory for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_OPENDIR )
 
@@ -467,7 +467,7 @@ int libcdirectory_directory_open(
 
 #if defined( HAVE_WIDE_CHARACTER_TYPE )
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Opens a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -673,7 +673,7 @@ on_error:
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI open directory for Windows 2000 or earlier NOT implemented yet
+#error WINAPI open directory for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_OPENDIR )
 
@@ -812,7 +812,7 @@ on_error:
 
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) */
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Closes a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -881,7 +881,7 @@ int libcdirectory_directory_close(
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI close directory for Windows 2000 or earlier NOT implemented yet
+#error WINAPI close directory for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_CLOSEDIR )
 
@@ -934,7 +934,7 @@ int libcdirectory_directory_close(
 #error Missing close directory function
 #endif
 
-#if defined( WINAPI ) && ( WINVER >= 0x0501 )
+#if defined( WINAPI ) && ( WINVER >= 0x0400 )
 
 /* Reads a directory
  * This function uses the WINAPI function for Windows XP or later
@@ -1066,7 +1066,7 @@ int libcdirectory_directory_read_entry(
 #elif defined( WINAPI )
 
 /* TODO */
-#error WINAPI read directory entry for Windows 2000 or earlier NOT implemented yet
+#error WINAPI read directory entry for Windows earlier than NT4 not implemented
 
 #elif defined( HAVE_READDIR_R )
 
