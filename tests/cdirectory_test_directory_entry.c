@@ -35,7 +35,7 @@
 #include "cdirectory_test_memory.h"
 #include "cdirectory_test_unused.h"
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT )
 
 extern \
 int libcdirectory_directory_entry_copy(
@@ -43,7 +43,7 @@ int libcdirectory_directory_entry_copy(
      libcdirectory_directory_entry_t *source_directory_entry,
      libcerror_error_t **error );
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT ) */
 
 /* Tests the libcdirectory_directory_entry_initialize function
  * Returns 1 if successful or 0 if not
@@ -278,7 +278,7 @@ on_error:
 	return( 0 );
 }
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT )
 
 /* Tests the libcdirectory_directory_entry_copy function
  * Returns 1 if successful or 0 if not
@@ -417,7 +417,7 @@ on_error:
 	return( 0 );
 }
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT ) */
 
 /* Tests the libcdirectory_directory_entry_get_type function
  * Returns 1 if successful or 0 if not
@@ -834,13 +834,13 @@ int main(
 	 "libcdirectory_directory_entry_free",
 	 cdirectory_test_directory_entry_free );
 
-#if defined( __GNUC__ )
+#if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT )
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_entry_copy",
 	 cdirectory_test_directory_entry_copy );
 
-#endif /* defined( __GNUC__ ) */
+#endif /* #if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT ) */
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_entry_get_type",
