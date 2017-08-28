@@ -72,13 +72,13 @@ int cdirectory_test_directory_entry_initialize(
 	 result,
 	 1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "directory_entry",
-         directory_entry );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory_entry",
+	 directory_entry );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_entry_free(
 	          &directory_entry,
@@ -89,13 +89,13 @@ int cdirectory_test_directory_entry_initialize(
 	 result,
 	 1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "directory_entry",
-         directory_entry );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -108,9 +108,9 @@ int cdirectory_test_directory_entry_initialize(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -126,9 +126,9 @@ int cdirectory_test_directory_entry_initialize(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -260,9 +260,9 @@ int cdirectory_test_directory_entry_free(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -313,9 +313,9 @@ int cdirectory_test_directory_entry_copy(
 	 result,
 	 1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -329,9 +329,9 @@ int cdirectory_test_directory_entry_copy(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -346,9 +346,9 @@ int cdirectory_test_directory_entry_copy(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -472,9 +472,9 @@ int cdirectory_test_directory_entry_get_type(
 	 entry_type,
 	 LIBCDIRECTORY_ENTRY_TYPE_FILE );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -488,9 +488,9 @@ int cdirectory_test_directory_entry_get_type(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -505,9 +505,9 @@ int cdirectory_test_directory_entry_get_type(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -593,9 +593,9 @@ int cdirectory_test_directory_entry_get_name(
 	 result,
 	 1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = narrow_string_compare(
 	          entry_name,
@@ -619,9 +619,9 @@ int cdirectory_test_directory_entry_get_name(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -636,9 +636,9 @@ int cdirectory_test_directory_entry_get_name(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -726,9 +726,9 @@ int cdirectory_test_directory_entry_get_name_wide(
 	 result,
 	 1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = wide_string_compare(
 	          entry_name,
@@ -752,9 +752,9 @@ int cdirectory_test_directory_entry_get_name_wide(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
@@ -769,9 +769,9 @@ int cdirectory_test_directory_entry_get_name_wide(
 	 result,
 	 -1 );
 
-        CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-         "error",
-         error );
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
 
 	libcerror_error_free(
 	 &error );
