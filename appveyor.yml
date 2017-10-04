@@ -65,16 +65,16 @@ build_script:
     msbuild vs2017\libcdirectory.sln /property:Platform=x64 /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll" )
 - cmd: if [%TARGET%]==[cygwin] (
     xcopy /i /q /s C:\projects\libcdirectory C:\cygwin\home\appveyor\libcdirectory &&
-    C:\cygwin\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh && ./autogen.sh" )
+    C:\cygwin\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%TARGET%]==[cygwin64] (
     xcopy /i /q /s C:\projects\libcdirectory C:\cygwin64\home\appveyor\libcdirectory &&
-    C:\cygwin64\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh && ./autogen.sh" )
+    C:\cygwin64\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%TARGET%]==[mingw] (
     xcopy /i /q /s C:\projects\libcdirectory C:\MinGW\msys\1.0\home\appveyor\libcdirectory &&
-    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libcdirectory && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && ./synclibs.sh && ./autogen.sh" )
+    C:\MinGW\msys\1.0\bin\bash -e -l -c "cd libcdirectory && sed 's/@VERSION@/0.29/g' m4/pkg.m4.in > m4/pkg.m4 && ./synclibs.sh --use-head && ./autogen.sh" )
 - cmd: if [%TARGET%]==[mingw-w64] (
     xcopy /i /q /s C:\projects\libcdirectory C:\msys64\home\appveyor\libcdirectory &&
-    C:\msys64\usr\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh && ./autogen.sh" )
+    C:\msys64\usr\bin\bash -e -l -c "cd libcdirectory && ./synclibs.sh --use-head && ./autogen.sh" )
 
 test_script:
 - cmd: rem Run tests

@@ -5,13 +5,13 @@ Summary: Library to support cross-platform C directory functions
 Group: System Environment/Libraries
 License: LGPL
 Source: %{name}-%{version}.tar.gz
-URL: https://github.com/libyal/libcdirectory/
+URL: https://github.com/libyal/libcdirectory
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 @libcdirectory_spec_requires@ @ax_libcerror_spec_requires@ @ax_libclocale_spec_requires@ @ax_libuna_spec_requires@
 @libcdirectory_spec_build_requires@ @ax_libcerror_spec_build_requires@ @ax_libclocale_spec_build_requires@ @ax_libuna_spec_build_requires@
 
 %description
-libcdirectory is a library to support cross-platform C directory functions
+Library to support cross-platform C directory functions
 
 %package devel
 Summary: Header files and libraries for developing applications for libcdirectory
