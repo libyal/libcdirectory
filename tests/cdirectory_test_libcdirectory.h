@@ -1,5 +1,5 @@
 /*
- * The internal libcdirectory header
+ * The libcdirectory header wrapper
  *
  * Copyright (C) 2008-2018, Joachim Metz <joachim.metz@gmail.com>
  *
