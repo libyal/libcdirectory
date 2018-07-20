@@ -37,8 +37,11 @@
 
 #include <libcdirectory/extern.h>
 
+#define LIBCDIRECTORY_EXTERN_VARIABLE	LIBCDIRECTORY_EXTERN
+
 #else
-#define LIBCDIRECTORY_EXTERN	/* extern */
+#define LIBCDIRECTORY_EXTERN		/* extern */
+#define LIBCDIRECTORY_EXTERN_VARIABLE	extern
 
 #endif /* !defined( HAVE_LOCAL_LIBCDIRECTORY ) */
 
