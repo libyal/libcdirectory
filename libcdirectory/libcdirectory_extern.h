@@ -28,13 +28,6 @@
  */
 #if !defined( HAVE_LOCAL_LIBCDIRECTORY )
 
-/* If libtool DLL support is enabled set LIBCDIRECTORY_DLL_EXPORT
- * before including libcdirectory/extern.h
- */
-#if defined( _WIN32 ) && defined( DLL_EXPORT )
-#define LIBCDIRECTORY_DLL_EXPORT
-#endif
-
 #include <libcdirectory/extern.h>
 
 #define LIBCDIRECTORY_EXTERN_VARIABLE	LIBCDIRECTORY_EXTERN
