@@ -10,15 +10,15 @@ BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 @libcdirectory_spec_requires@ @ax_libcerror_spec_requires@ @ax_libclocale_spec_requires@ @ax_libuna_spec_requires@
 BuildRequires: gcc @ax_libcerror_spec_build_requires@ @ax_libclocale_spec_build_requires@ @ax_libuna_spec_build_requires@
 
-%description
+%description -n libcdirectory
 Library to support cross-platform C directory functions
 
-%package devel
+%package -n libcdirectory-devel
 Summary: Header files and libraries for developing applications for libcdirectory
 Group: Development/Libraries
 Requires: libcdirectory = %{version}-%{release}
 
-%description devel
+%description -n libcdirectory-devel
 Header files and libraries for developing applications for libcdirectory.
 
 %prep
@@ -39,13 +39,13 @@ rm -rf %{buildroot}
 
 %postun -p /sbin/ldconfig
 
-%files
+%files -n libcdirectory
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README
 %attr(755,root,root) %{_libdir}/*.so.*
 
-%files devel
+%files -n libcdirectory-devel
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README ChangeLog
