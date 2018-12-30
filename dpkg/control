@@ -9,6 +9,8 @@ Homepage: https://github.com/libyal/libcdirectory
 Package: libcdirectory
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
+Conflicts: libcdirectory1
+Replaces: libcdirectory1
 Suggests: libcdirectory-dbg
 Description: Library to support cross-platform C directory functions
  libcdirectory is a library to support cross-platform C directory functions.
