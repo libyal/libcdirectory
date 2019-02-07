@@ -13,6 +13,14 @@ BuildRequires: gcc @ax_libcerror_spec_build_requires@ @ax_libclocale_spec_build_
 %description -n libcdirectory
 Library to support cross-platform C directory functions
 
+%package -n libcdirectory-static
+Summary: Library to support cross-platform C directory functions
+Group: Development/Libraries
+Requires: libcdirectory = %{version}-%{release}
+
+%description -n libcdirectory-static
+Static library version of libcdirectory.
+
 %package -n libcdirectory-devel
 Summary: Header files and libraries for developing applications for libcdirectory
 Group: Development/Libraries
@@ -45,11 +53,16 @@ rm -rf %{buildroot}
 %doc AUTHORS README
 %attr(755,root,root) %{_libdir}/*.so.*
 
+%files -n libcdirectory-static
+%defattr(644,root,root,755)
+%license COPYING
+%doc AUTHORS README
+%attr(755,root,root) %{_libdir}/*.a
+
 %files -n libcdirectory-devel
 %defattr(644,root,root,755)
 %license COPYING
 %doc AUTHORS README
-%{_libdir}/*.a
 %{_libdir}/*.la
 %{_libdir}/*.so
 %{_libdir}/pkgconfig/libcdirectory.pc
