@@ -7,10 +7,12 @@ AM_CPPFLAGS = \
 	@LIBCDIRECTORY_DLL_IMPORT@
 
 TESTS = \
-	test_library.sh
+	test_library.sh \
+	test_manpage.sh
 
 check_SCRIPTS = \
 	test_library.sh \
+	test_manpage.sh \
 	test_runner.sh
 
 EXTRA_DIST = \
