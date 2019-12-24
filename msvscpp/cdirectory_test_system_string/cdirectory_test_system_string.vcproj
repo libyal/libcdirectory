@@ -2,9 +2,9 @@
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="9,00"
-	Name="cdirectory_test_error"
-	ProjectGUID="{43B101A7-CB8E-4349-91E3-55A1B90A67B2}"
-	RootNamespace="cdirectory_test_error"
+	Name="cdirectory_test_system_string"
+	ProjectGUID="{2994B871-E2D3-4FA5-A507-E55402855FE5}"
+	RootNamespace="cdirectory_test_system_string"
 	Keyword="Win32Proj"
 	TargetFrameworkVersion="131072"
 	>
@@ -176,7 +176,7 @@
 			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}"
 			>
 			<File
-				RelativePath="..\..\tests\cdirectory_test_error.c"
+				RelativePath="..\..\tests\cdirectory_test_system_string.c"
 				>
 			</File>
 		</Filter>
@@ -187,6 +187,10 @@
 			>
 			<File
 				RelativePath="..\..\tests\cdirectory_test_libcdirectory.h"
+				>
+			</File>
+			<File
+				RelativePath="..\..\tests\cdirectory_test_libcerror.h"
 				>
 			</File>
 			<File

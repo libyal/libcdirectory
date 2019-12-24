@@ -21,7 +21,8 @@ check_PROGRAMS = \
 	cdirectory_test_directory \
 	cdirectory_test_directory_entry \
 	cdirectory_test_error \
-	cdirectory_test_support
+	cdirectory_test_support \
+	cdirectory_test_system_string
 
 cdirectory_test_directory_SOURCES = \
 	cdirectory_test_directory.c \
@@ -50,13 +51,11 @@ cdirectory_test_directory_entry_LDADD = \
 cdirectory_test_error_SOURCES = \
 	cdirectory_test_error.c \
 	cdirectory_test_libcdirectory.h \
-	cdirectory_test_libcerror.h \
 	cdirectory_test_macros.h \
 	cdirectory_test_unused.h
 
 cdirectory_test_error_LDADD = \
-	../libcdirectory/libcdirectory.la \
-	@LIBCERROR_LIBADD@
+	../libcdirectory/libcdirectory.la
 
 cdirectory_test_support_SOURCES = \
 	cdirectory_test_libcdirectory.h \
@@ -66,6 +65,17 @@ cdirectory_test_support_SOURCES = \
 	cdirectory_test_unused.h
 
 cdirectory_test_support_LDADD = \
+	../libcdirectory/libcdirectory.la \
+	@LIBCERROR_LIBADD@
+
+cdirectory_test_system_string_SOURCES = \
+	cdirectory_test_libcdirectory.h \
+	cdirectory_test_libcerror.h \
+	cdirectory_test_macros.h \
+	cdirectory_test_system_string.c \
+	cdirectory_test_unused.h
+
+cdirectory_test_system_string_LDADD = \
 	../libcdirectory/libcdirectory.la \
 	@LIBCERROR_LIBADD@
 

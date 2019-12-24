@@ -7,7 +7,7 @@ EXIT_SUCCESS=0;
 EXIT_FAILURE=1;
 EXIT_IGNORE=77;
 
-LIBRARY_TESTS="directory_entry error support";
+LIBRARY_TESTS="directory_entry error support system_string";
 LIBRARY_TESTS_WITH_INPUT="directory";
 OPTION_SETS="";
 

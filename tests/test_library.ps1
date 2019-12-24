@@ -6,7 +6,7 @@ $ExitSuccess = 0
 $ExitFailure = 1
 $ExitIgnore = 77
 
-$LibraryTests = "directory_entry error support"
+$LibraryTests = "directory_entry error support system_string"
 $LibraryTestsWithInput = "directory"
 
 $InputGlob = "*"

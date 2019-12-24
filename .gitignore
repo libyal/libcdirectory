@@ -1,6 +1,6 @@
 # Files to ignore by git
 #
-# Version: 20191005
+# Version: 20191220
 
 # Generic auto-generated build files
 *~
@@ -27,6 +27,7 @@
 *.trs
 /*.egg-info/
 .deps
+.dirstamp
 .libs
 INSTALL
 Makefile
@@ -126,6 +127,7 @@ stamp-h[1-9]
 /tests/cdirectory_test_directory_entry
 /tests/cdirectory_test_error
 /tests/cdirectory_test_support
+/tests/cdirectory_test_system_string
 /tests/tmp*
 
 # Local library dependencies specific files
