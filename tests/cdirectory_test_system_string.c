@@ -1,5 +1,5 @@
 /*
- * Library system string functions test program
+ * System string functions test program
  *
  * Copyright (C) 2008-2020, Joachim Metz <joachim.metz@gmail.com>
  *
@@ -30,8 +30,8 @@
 #include <stdlib.h>
 #endif
 
-#include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_libcdirectory.h"
+#include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_macros.h"
 #include "cdirectory_test_unused.h"
 
@@ -1038,7 +1038,11 @@ int main(
 
 	return( EXIT_SUCCESS );
 
+#if defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT )
+
 on_error:
 	return( EXIT_FAILURE );
+
+#endif /* defined( __GNUC__ ) && !defined( LIBCDIRECTORY_DLL_IMPORT ) */
 }
 
