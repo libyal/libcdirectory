@@ -3,46 +3,7 @@ TODO:
 * change libcdirectory_directory_has_entry(_wide) to not require explicit
   open/close directory before usage
 
-20161106
-* worked on tests
-* bug fixes in WINAPI support
-* code clean up
-
-20160824
-* worked on tests
-
-20160823
-* worked on tests
-
-20160822
-* worked on tests
-* removed USE_CRT_FUNCTIONS support
-
-20160101
-* 2016 update 
-* updated dependencies
-
-20150729
-* worked on tests
-
-20150101
-* 2015 update
-
-20141229
-* updated dpkg files
-
-20141018
-* worked on stand-alone version
-
-20141015
-* changes for deployment
-
-20141014
-* fix in Makefile
-
-20141011
-* worked on utility scripts
-
 20140929
-* Worked on stand-alone version based on version used in libevt
+* see `git log' for more recent change log
+* Created stand-alone version of version of libcdirectory used in libevt
 
