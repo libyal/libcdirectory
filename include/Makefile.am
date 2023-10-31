@@ -19,9 +19,9 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f libcdirectory.h
-	/bin/rm -f libcdirectory/definitions.h
-	/bin/rm -f libcdirectory/features.h
-	/bin/rm -f libcdirectory/types.h
-	/bin/rm -f Makefile
+	-rm -f libcdirectory.h
+	-rm -f libcdirectory/definitions.h
+	-rm -f libcdirectory/features.h
+	-rm -f libcdirectory/types.h
+	-rm -f Makefile
 

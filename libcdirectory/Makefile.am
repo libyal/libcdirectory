@@ -40,11 +40,13 @@ MAINTAINERCLEANFILES = \
 	Makefile.in
 
 distclean: clean
-	/bin/rm -f libcdirectory_definitions.h
-	/bin/rm -f libcdirectory.rc
-	/bin/rm -f Makefile
+	-rm -f libcdirectory_definitions.h
+	-rm -f libcdirectory.rc
+	-rm -f Makefile
 
-splint:
+sources-local: $(BUILT_SOURCES)
+
+splint-local:
 	@echo "Running splint on libcdirectory ..."
 	-splint -preproc -redef $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(libcdirectory_la_SOURCES)
 
