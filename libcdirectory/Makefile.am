@@ -1,6 +1,6 @@
 AM_CPPFLAGS = \
-	-I$(top_srcdir)/include \
-	-I$(top_srcdir)/common \
+	-I../include -I$(top_srcdir)/include \
+	-I../common -I$(top_srcdir)/common \
 	@LIBCERROR_CPPFLAGS@ \
 	@LIBCLOCALE_CPPFLAGS@ \
 	@LIBUNA_CPPFLAGS@ \
@@ -36,13 +36,11 @@ EXTRA_DIST = \
 	libcdirectory.rc \
 	libcdirectory.rc.in
 
-MAINTAINERCLEANFILES = \
+DISTCLEANFILES = \
+	libcdirectory_definitions.h \
+	libcdirectory.rc \
+	Makefile \
 	Makefile.in
-
-distclean: clean
-	-rm -f libcdirectory_definitions.h
-	-rm -f libcdirectory.rc
-	-rm -f Makefile
 
 sources-local: $(BUILT_SOURCES)
 

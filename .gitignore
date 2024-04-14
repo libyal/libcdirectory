@@ -133,6 +133,7 @@ stamp-h[1-9]
 /tests/cdirectory_test_error
 /tests/cdirectory_test_support
 /tests/cdirectory_test_system_string
+/tests/TestFile
 /tests/tmp*
 
 # Local library dependencies specific files

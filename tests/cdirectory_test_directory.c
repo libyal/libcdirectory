@@ -327,7 +327,7 @@ int cdirectory_test_directory_open(
 	 */
 	result = libcdirectory_directory_open(
 	          directory,
-	          "Makefile.am",
+	          "TestFile",
 	          &error );
 
 	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
@@ -439,7 +439,7 @@ int cdirectory_test_directory_open_wide(
 	 */
 	result = libcdirectory_directory_open_wide(
 	          directory,
-	          L"Makefile.am",
+	          L"TestFile",
 	          &error );
 
 	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
@@ -815,8 +815,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "Makefile.am",
-	          11,
+	          "TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -844,8 +844,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "MAKEFILE.AM",
-	          11,
+	          "TESTFILE",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -875,8 +875,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "MAKEFILE.AM",
-	          11,
+	          "TESTFILE",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
 	          &error );
@@ -899,8 +899,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          NULL,
 	          directory_entry,
-	          "Makefile.am",
-	          11,
+	          "TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -920,8 +920,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          NULL,
-	          "Makefile.am",
-	          11,
+	          "TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -962,7 +962,7 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "Makefile.am",
+	          "TestFile",
 	          (size_t) SSIZE_MAX + 1,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
@@ -983,8 +983,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "Makefile.am",
-	          11,
+	          "TestFile",
+	          8,
 	          123,
 	          0,
 	          &error );
@@ -1004,8 +1004,8 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_has_entry(
 	          directory,
 	          directory_entry,
-	          "Makefile.am",
-	          11,
+	          "TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          80,
 	          &error );
@@ -1089,8 +1089,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"Makefile.am",
-	          11,
+	          L"TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -1118,8 +1118,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"MAKEFILE.AM",
-	          11,
+	          L"TESTFILE",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -1149,8 +1149,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"MAKEFILE.AM",
-	          11,
+	          L"TESTFILE",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          LIBCDIRECTORY_COMPARE_FLAG_NO_CASE,
 	          &error );
@@ -1173,8 +1173,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          NULL,
 	          directory_entry,
-	          L"Makefile.am",
-	          11,
+	          L"TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -1194,8 +1194,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          NULL,
-	          L"Makefile.am",
-	          11,
+	          L"TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
 	          &error );
@@ -1236,7 +1236,7 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"Makefile.am",
+	          L"TestFile",
 	          (size_t) SSIZE_MAX + 1,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          0,
@@ -1257,8 +1257,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"Makefile.am",
-	          11,
+	          L"TestFile",
+	          8,
 	          123,
 	          0,
 	          &error );
@@ -1278,8 +1278,8 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
 	          directory_entry,
-	          L"Makefile.am",
-	          11,
+	          L"TestFile",
+	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
 	          80,
 	          &error );
@@ -1343,8 +1343,29 @@ int main(
      char * const argv[] CDIRECTORY_TEST_ATTRIBUTE_UNUSED )
 #endif
 {
+	FILE *file_stream = NULL;
+	int result        = 0;
+
 	CDIRECTORY_TEST_UNREFERENCED_PARAMETER( argc )
 	CDIRECTORY_TEST_UNREFERENCED_PARAMETER( argv )
+
+	file_stream = file_stream_open(
+	               "TestFile",
+	               "a" );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "file_stream",
+	 file_stream );
+
+	result = file_stream_close(
+	          file_stream );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	file_stream = NULL;
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_initialize",
