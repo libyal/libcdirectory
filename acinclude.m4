@@ -1,6 +1,6 @@
 dnl Checks for required headers and functions
 dnl
-dnl Version: 20190308
+dnl Version: 20240413
 
 dnl Function to detect if libcdirectory dependencies are available
 AC_DEFUN([AX_LIBCDIRECTORY_CHECK_LOCAL],

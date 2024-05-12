@@ -1,6 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual C++ Express 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libclocale", "libclocale\libclocale.vcproj", "{D912B2AE-867E-4908-BF1C-4313D32C3FCC}"
+	ProjectSection(ProjectDependencies) = postProject
+		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
+	EndProjectSection
+EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cdirectory_test_directory", "cdirectory_test_directory\cdirectory_test_directory.vcproj", "{FABFBD0A-21A8-4835-9716-9B3C287FCCE0}"
 	ProjectSection(ProjectDependencies) = postProject
 		{EF346A77-7F30-401B-B57B-E4EAEEDFFAF4} = {EF346A77-7F30-401B-B57B-E4EAEEDFFAF4}
@@ -30,11 +35,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cdirectory_test_system_stri
 		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
 	EndProjectSection
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libclocale", "libclocale\libclocale.vcproj", "{D912B2AE-867E-4908-BF1C-4313D32C3FCC}"
-	ProjectSection(ProjectDependencies) = postProject
-		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libuna", "libuna\libuna.vcproj", "{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}"
 	ProjectSection(ProjectDependencies) = postProject
 		{9603DA60-ECBF-4438-B500-CFC15A151F50} = {9603DA60-ECBF-4438-B500-CFC15A151F50}
@@ -55,6 +55,10 @@ Global
 		VSDebug|Win32 = VSDebug|Win32
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.ActiveCfg = Release|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.Build.0 = Release|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
+		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.Build.0 = VSDebug|Win32
 		{FABFBD0A-21A8-4835-9716-9B3C287FCCE0}.Release|Win32.ActiveCfg = Release|Win32
 		{FABFBD0A-21A8-4835-9716-9B3C287FCCE0}.Release|Win32.Build.0 = Release|Win32
 		{FABFBD0A-21A8-4835-9716-9B3C287FCCE0}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
@@ -75,10 +79,6 @@ Global
 		{2994B871-E2D3-4FA5-A507-E55402855FE5}.Release|Win32.Build.0 = Release|Win32
 		{2994B871-E2D3-4FA5-A507-E55402855FE5}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
 		{2994B871-E2D3-4FA5-A507-E55402855FE5}.VSDebug|Win32.Build.0 = VSDebug|Win32
-		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.ActiveCfg = Release|Win32
-		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.Release|Win32.Build.0 = Release|Win32
-		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
-		{D912B2AE-867E-4908-BF1C-4313D32C3FCC}.VSDebug|Win32.Build.0 = VSDebug|Win32
 		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.Release|Win32.ActiveCfg = Release|Win32
 		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.Release|Win32.Build.0 = Release|Win32
 		{A3E34A21-6A3C-4B6D-BDF2-5EA55ED415B8}.VSDebug|Win32.ActiveCfg = VSDebug|Win32
