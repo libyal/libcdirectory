@@ -369,6 +369,20 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
+	/* Note that FindFirstFile on a non-directory will be successful
+	 */
+	if( ( internal_first_directory_entry->find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
+	{
+		libcerror_system_set_error(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_IO,
+		 LIBCERROR_IO_ERROR_OPEN_FAILED,
+		 error_code,
+		 "%s: unsupported file type - not a directory.",
+		 function );
+
+		goto on_error;
+	}
 	memory_free(
 	 system_directory_name );
 
@@ -646,6 +660,20 @@ int libcdirectory_directory_open_wide(
 		 LIBCERROR_IO_ERROR_OPEN_FAILED,
 		 error_code,
 		 "%s: unable to open directory.",
+		 function );
+
+		goto on_error;
+	}
+	/* Note that FindFirstFile on a non-directory will be successful
+	 */
+	if( ( internal_first_directory_entry->find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
+	{
+		libcerror_system_set_error(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_IO,
+		 LIBCERROR_IO_ERROR_OPEN_FAILED,
+		 error_code,
+		 "%s: unsupported file type - not a directory.",
 		 function );
 
 		goto on_error;
