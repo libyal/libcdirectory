@@ -31,14 +31,17 @@
  */
 #if defined( LIBCDIRECTORY_DLL_EXPORT )
 #define LIBCDIRECTORY_EXTERN __declspec(dllexport)
+#define LIBCDIRECTORY_EXTERN_VARIABLE extern __declspec(dllexport)
 
 #elif defined( LIBCDIRECTORY_DLL_IMPORT )
-#define LIBCDIRECTORY_EXTERN extern __declspec(dllimport)
+#define LIBCDIRECTORY_EXTERN __declspec(dllimport)
+#define LIBCDIRECTORY_EXTERN_VARIABLE extern __declspec(dllimport)
 
 #else
 #define LIBCDIRECTORY_EXTERN extern
+#define LIBCDIRECTORY_EXTERN_VARIABLE extern
 
-#endif
+#endif /* defined( LIBCDIRECTORY_DLL_EXPORT ) */
 
 #endif /* !defined( _LIBCDIRECTORY_EXTERN_H ) */
 

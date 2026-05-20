@@ -30,12 +30,6 @@
 
 #include <libcdirectory/extern.h>
 
-#if defined( __CYGWIN__ ) || defined( __MINGW32__ )
-#define LIBCDIRECTORY_EXTERN_VARIABLE	extern
-#else
-#define LIBCDIRECTORY_EXTERN_VARIABLE	LIBCDIRECTORY_EXTERN
-#endif
-
 #else
 #define LIBCDIRECTORY_EXTERN		/* extern */
 #define LIBCDIRECTORY_EXTERN_VARIABLE	extern
