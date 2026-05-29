@@ -345,47 +345,100 @@ int libcdirectory_directory_entry_get_type(
 
 		return( -1 );
 	}
-	/* TODO what about DT_WHT ? */
-	if( ( internal_directory_entry->entry.d_type == DT_BLK )
-	 || ( internal_directory_entry->entry.d_type == DT_CHR ) )
+#if defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	switch( internal_directory_entry->entry.d_type )
 	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_DEVICE;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_DIR )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_DIRECTORY;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_FIFO )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_PIPE;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_LNK )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_LINK;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_REG )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_FILE;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_SOCK )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_SOCKET;
-	}
-	else if( internal_directory_entry->entry.d_type == DT_UNKNOWN )
-	{
-		*type = LIBCDIRECTORY_ENTRY_TYPE_UNDEFINED;
-	}
-	else
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
-		 "%s: unsupported type.",
-		 function );
+		case DT_BLK:
+		case DT_CHR:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_DEVICE;
+			break;
 
-		return( -1 );
+		case DT_DIR:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_DIRECTORY;
+			break;
+
+		case DT_FIFO:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_PIPE;
+			break;
+
+		case DT_LNK:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_LINK;
+			break;
+
+		case DT_REG:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_FILE;
+			break;
+
+		case DT_SOCK:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_SOCKET;
+			break;
+
+		case DT_UNKNOWN:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_UNDEFINED;
+			break;
+#if defined( DT_WHT )
+		case DT_WHT:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_WHITEOUT;
+			break;
+#endif
+		default:
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
+			 "%s: unsupported type.",
+			 function );
+
+			return( -1 );
 	}
+#else
+	switch( internal_directory_entry->st_mode )
+	{
+		case S_IFBLK:
+		case S_IFCHR:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_DEVICE;
+			break;
+
+		case S_IFDIR:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_DIRECTORY;
+			break;
+
+		case S_IFIFO:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_PIPE;
+			break;
+
+#if defined( S_IFLNK )
+		case S_IFLNK:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_LINK;
+			break;
+#endif
+
+		case S_IFREG:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_FILE;
+			break;
+
+#if defined( S_IFSOCK )
+		case S_IFSOCK:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_SOCKET;
+			break;
+#endif
+#if defined( S_IFWHT )
+		case S_IFWHT:
+			*type = LIBCDIRECTORY_ENTRY_TYPE_WHITEOUT;
+			break;
+#endif
+		default:
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
+			 "%s: unsupported type.",
+			 function );
+
+			return( -1 );
+	}
+#endif /* defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE ) */
+
 	return( 1 );
 }
 

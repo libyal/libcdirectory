@@ -42,6 +42,10 @@
 #include <dirent.h>
 #endif
 
+#if defined( HAVE_FCNTL_H )
+#include <fcntl.h>
+#endif
+
 #if defined( HAVE_UNISTD_H )
 #include <unistd.h>
 #endif
@@ -178,6 +182,15 @@ int libcdirectory_directory_free(
 				result = -1;
 			}
 		}
+#if defined( HAVE_DIRENT_H ) && !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+		if( internal_directory->path != NULL )
+		{
+			memory_free(
+			 internal_directory->path );
+
+			internal_directory->path = NULL;
+		}
+#endif
 		*directory = NULL;
 
 		memory_free(
@@ -288,8 +301,8 @@ int libcdirectory_directory_open(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
 		 "%s: unable to determine system character directory name size.",
 		 function );
 
@@ -327,8 +340,8 @@ int libcdirectory_directory_open(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
 		 "%s: unable to set system character directory name.",
 		 function );
 
@@ -422,6 +435,12 @@ int libcdirectory_directory_open(
 	libcdirectory_internal_directory_t *internal_directory = NULL;
 	static char *function                                  = "libcdirectory_directory_open";
 
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	char *system_directory_name                            = NULL;
+	size_t directory_name_length                           = 0;
+	size_t system_directory_name_size                      = 0;
+#endif
+
 	if( directory == NULL )
 	{
 		libcerror_error_set(
@@ -457,6 +476,19 @@ int libcdirectory_directory_open(
 
 		return( -1 );
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( internal_directory->path != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid directory - path value already set.",
+		 function );
+
+		goto on_error;
+	}
+#endif
 	internal_directory->stream = opendir(
 	                              directory_name );
 
@@ -470,9 +502,73 @@ int libcdirectory_directory_open(
 		 "%s: unable to open directory.",
 		 function );
 
-		return( -1 );
+		goto on_error;
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	directory_name_length = narrow_string_length(
+	                         directory_name );
+
+	if( libcdirectory_system_string_size_from_narrow_string(
+	     directory_name,
+	     directory_name_length + 1,
+	     &system_directory_name_size,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+		 "%s: unable to determine system character directory name size.",
+		 function );
+
+		goto on_error;
+	}
+	system_directory_name = system_string_allocate(
+	                         system_directory_name_size );
+
+	if( system_directory_name == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+		 "%s: unable to create system character directory name.",
+		 function );
+
+		goto on_error;
+	}
+	if( libcdirectory_system_string_copy_from_narrow_string(
+	     system_directory_name,
+	     system_directory_name_size,
+	     directory_name,
+	     directory_name_length + 1,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+		 "%s: unable to set system character directory name.",
+		 function );
+
+		goto on_error;
+	}
+	internal_directory->path      = system_directory_name;
+	internal_directory->path_size = system_directory_name_size;
+
+#endif /* !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE ) */
+
 	return( 1 );
+
+on_error:
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( system_directory_name != NULL )
+	{
+		memory_free(
+		 system_directory_name );
+	}
+#endif
+	return( -1 );
 }
 
 #else
@@ -583,8 +679,8 @@ int libcdirectory_directory_open_wide(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
 		 "%s: unable to determine system character directory name size.",
 		 function );
 
@@ -622,8 +718,8 @@ int libcdirectory_directory_open_wide(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
 		 "%s: unable to set system character directory name.",
 		 function );
 
@@ -755,6 +851,19 @@ int libcdirectory_directory_open_wide(
 
 		return( -1 );
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( internal_directory->path != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid directory - path value already set.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 	directory_name_length = wide_string_length(
 	                         directory_name );
 
@@ -766,8 +875,8 @@ int libcdirectory_directory_open_wide(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
 		 "%s: unable to determine system character directory name size.",
 		 function );
 
@@ -796,8 +905,8 @@ int libcdirectory_directory_open_wide(
 	{
 		libcerror_error_set(
 		 error,
-		 LIBCERROR_ERROR_DOMAIN_CONVERSION,
-		 LIBCERROR_CONVERSION_ERROR_GENERIC,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
 		 "%s: unable to set system character directory name.",
 		 function );
 
@@ -818,11 +927,15 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	internal_directory->path      = system_directory_name;
+	internal_directory->path_size = system_directory_name_size;
+#else
 	memory_free(
 	 system_directory_name );
 
 	system_directory_name = NULL;
-
+#endif
 	return( 1 );
 
 on_error:
@@ -1096,10 +1209,10 @@ int libcdirectory_directory_read_entry(
 /* TODO */
 #error WINAPI read directory entry for Windows earlier than NT4 not implemented
 
-#elif defined( HAVE_READDIR_R )
+#elif defined( HAVE_READDIR ) || defined( HAVE_READDIR_R )
 
 /* Reads a directory
- * This function uses the POSIX readdir_r function
+ * This function uses the POSIX readdir or readdir_r function
  * Returns 1 if successful, 0 if no such entry or -1 on error
  */
 int libcdirectory_directory_read_entry(
@@ -1112,6 +1225,15 @@ int libcdirectory_directory_read_entry(
 	struct dirent *result_directory_entry                              = NULL;
 	static char *function                                              = "libcdirectory_directory_read_entry";
 	int result                                                         = 0;
+
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	struct stat file_statistics;
+
+	system_character_t *system_directory_entry_path                    = NULL;
+	size_t directory_entry_name_length                                 = 0;
+	size_t system_directory_entry_path_index                           = 0;
+	size_t system_directory_entry_path_size                            = 0;
+#endif
 
 	if( directory == NULL )
 	{
@@ -1150,6 +1272,19 @@ int libcdirectory_directory_read_entry(
 
 		return( -1 );
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( internal_directory->path != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_MISSING,
+		 "%s: invalid directory - missing path.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 #if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( internal_directory_entry->narrow_name != NULL )
 	{
@@ -1168,10 +1303,25 @@ int libcdirectory_directory_read_entry(
 	}
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
+#if defined( HAVE_READDIR ) && ( !defined( HAVE_READDIR_R ) || defined( HAVE_DEPRECATED_READDIR_R ) )
+
+	errno = 0;
+
+	result_directory_entry = readdir(
+	                          internal_directory->stream );
+
+	if( ( result_directory_entry == NULL )
+	  && ( errno != 0 ) )
+	{
+		result = -1;
+	}
+#else
 	result = readdir_r(
 	          internal_directory->stream,
 	          &( internal_directory_entry->entry ),
 	          &result_directory_entry );
+
+#endif /* defined( HAVE_READDIR ) && ( !defined( HAVE_READDIR_R ) || defined( HAVE_DEPRECATED_READDIR_R ) ) */
 
 	if( result != 0 )
 	{
@@ -1189,7 +1339,113 @@ int libcdirectory_directory_read_entry(
 	{
 		return( 0 );
 	}
+#if defined( HAVE_READDIR ) && ( !defined( HAVE_READDIR_R ) || defined( HAVE_DEPRECATED_READDIR_R ) )
+	if( memory_copy(
+	     &( internal_directory_entry->entry ),
+	     result_directory_entry,
+	     sizeof( struct dirent ) ) == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+		 "%s: unable to copy directory entry.",
+		 function );
+
+		goto on_error;
+	}
+#endif
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	directory_entry_name_length = narrow_string_length(
+	                               (char *) internal_directory_entry->entry.d_name );
+
+	system_directory_entry_path_size = internal_directory->path_size + directory_entry_name_length + 1;
+
+	system_directory_entry_path = system_string_allocate(
+	                               system_directory_entry_path_size );
+
+	if( system_directory_entry_path == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+		 "%s: unable to create system character directory entry path.",
+		 function );
+
+		goto on_error;
+	}
+	if( system_string_copy(
+	     system_directory_entry_path,
+	     internal_directory->path,
+	     internal_directory->path_size ) == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+		 "%s: unable to copy directory path to system character directory path.",
+		 function );
+
+		goto on_error;
+	}
+	system_directory_entry_path_index = internal_directory->path_size - 1;
+
+	system_directory_entry_path[ system_directory_entry_path_index++ ] = (system_character_t) '/';
+
+	if( libcdirectory_system_string_copy_from_narrow_string(
+	     &( system_directory_entry_path[ system_directory_entry_path_index ] ),
+	     system_directory_entry_path_size - system_directory_entry_path_index,
+	     (char *) internal_directory_entry->entry.d_name,
+	     directory_entry_name_length,
+	     error ) != 1 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+		 "%s: unable to copy directory entry name to system character directory path.",
+		 function );
+
+		goto on_error;
+	}
+	system_directory_entry_path_index += directory_entry_name_length;
+
+	system_directory_entry_path[ system_directory_entry_path_index ] = 0;
+
+	if( stat(
+	     system_directory_entry_path,
+	     &file_statistics ) != 0 )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+		 "%s: unable to retrieve directory entry file statistics.",
+		 function );
+
+		goto on_error;
+	}
+	memory_free(
+	 system_directory_entry_path );
+
+	system_directory_entry_path = NULL;
+
+	internal_directory_entry->st_mode = file_statistics.st_mode;
+
+#endif /* !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE ) */
+
 	return( 1 );
+
+on_error:
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( system_directory_entry_path != NULL )
+	{
+		memory_free(
+		 system_directory_entry_path );
+	}
+#endif
+	return( -1 );
 }
 
 #else

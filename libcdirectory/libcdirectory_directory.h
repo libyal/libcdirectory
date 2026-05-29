@@ -40,21 +40,23 @@ extern "C" {
 
 typedef struct libcdirectory_internal_directory libcdirectory_internal_directory_t;
 
-#if defined( WINAPI )
 struct libcdirectory_internal_directory
 {
+#if defined( WINAPI )
 	HANDLE handle;
 
 	libcdirectory_directory_entry_t *first_entry;
-};
 
 #elif defined( HAVE_DIRENT_H )
-struct libcdirectory_internal_directory
-{
 	DIR *stream;
-};
 
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	system_character_t *path;
+
+	size_t path_size;
 #endif
+#endif
+};
 
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_initialize(

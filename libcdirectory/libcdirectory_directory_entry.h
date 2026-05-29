@@ -45,6 +45,10 @@
 #include "libcdirectory_libcerror.h"
 #include "libcdirectory_types.h"
 
+#if defined( HAVE_DIRENT_H ) && ( defined( _DIRENT_HAVE_D_TYPE ) || defined(__APPLE__) || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) )
+#define LIBCDIRECTORY_HAVE_DIRENT_D_TYPE
+#endif
+
 #if defined( __cplusplus )
 extern "C" {
 #endif
@@ -72,6 +76,9 @@ struct libcdirectory_internal_directory_entry
 	char *narrow_name;
 #else
 	wchar_t *wide_name;
+#endif
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	mode_t st_mode;
 #endif
 };
 
