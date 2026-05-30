@@ -282,6 +282,19 @@ int cdirectory_test_directory_open(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	/* Test open of directory
 	 */
 	result = libcdirectory_directory_open(
@@ -321,7 +334,16 @@ int cdirectory_test_directory_open(
 	 */
 	result = libcdirectory_directory_close(
 	          directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test open of file
 	 */
@@ -382,7 +404,20 @@ int cdirectory_test_directory_open(
 	 */
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -418,6 +453,19 @@ int cdirectory_test_directory_open_wide(
 	result = libcdirectory_directory_initialize(
 	          &directory,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test open of directory
 	 */
@@ -477,7 +525,16 @@ int cdirectory_test_directory_open_wide(
 	 */
 	result = libcdirectory_directory_close(
 	          directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -550,7 +607,20 @@ int cdirectory_test_directory_open_wide(
 	 */
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -587,10 +657,32 @@ int cdirectory_test_directory_close(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test close of directory
 	 */
@@ -629,7 +721,20 @@ int cdirectory_test_directory_close(
 	 */
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -665,14 +770,49 @@ int cdirectory_test_directory_read_entry(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test read entry of directory
 	 */
@@ -694,7 +834,16 @@ int cdirectory_test_directory_read_entry(
 	 */
 	result = libcdirectory_directory_close(
 	          directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -753,11 +902,37 @@ int cdirectory_test_directory_read_entry(
 	 */
 	result = libcdirectory_directory_entry_free(
 	          &directory_entry,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -799,9 +974,35 @@ int cdirectory_test_directory_has_entry(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 #if !defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) && !defined( WINAPI )
 
@@ -812,6 +1013,15 @@ int cdirectory_test_directory_has_entry(
 	          directory,
 	          ".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry(
 	          directory,
@@ -835,12 +1045,30 @@ int cdirectory_test_directory_has_entry(
 	          directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	/* Test has entry non-match
 	 */
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry(
 	          directory,
@@ -864,6 +1092,15 @@ int cdirectory_test_directory_has_entry(
 	          directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 #endif /* !defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) && !defined( WINAPI ) */
 
 	/* Test has entry with caseless compare
@@ -872,6 +1109,15 @@ int cdirectory_test_directory_has_entry(
 	          directory,
 	          ".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry(
 	          directory,
@@ -894,6 +1140,15 @@ int cdirectory_test_directory_has_entry(
 	result = libcdirectory_directory_close(
 	          directory,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -1027,11 +1282,37 @@ int cdirectory_test_directory_has_entry(
 	 */
 	result = libcdirectory_directory_entry_free(
 	          &directory_entry,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
@@ -1075,9 +1356,35 @@ int cdirectory_test_directory_has_entry_wide(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 #if !defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) && !defined( WINAPI )
 
@@ -1087,6 +1394,15 @@ int cdirectory_test_directory_has_entry_wide(
 	          directory,
 	          L".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
@@ -1110,12 +1426,30 @@ int cdirectory_test_directory_has_entry_wide(
 	          directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	/* Test has entry non-match
 	 */
 	result = libcdirectory_directory_open_wide(
 	          directory,
 	          L".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
@@ -1139,6 +1473,15 @@ int cdirectory_test_directory_has_entry_wide(
 	          directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 #endif /* !defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) && !defined( WINAPI ) */
 
 	/* Test has entry with caseless compare
@@ -1147,6 +1490,15 @@ int cdirectory_test_directory_has_entry_wide(
 	          directory,
 	          L".",
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
@@ -1169,6 +1521,15 @@ int cdirectory_test_directory_has_entry_wide(
 	result = libcdirectory_directory_close(
 	          directory,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	/* Test error cases
 	 */
@@ -1302,11 +1663,37 @@ int cdirectory_test_directory_has_entry_wide(
 	 */
 	result = libcdirectory_directory_entry_free(
 	          &directory_entry,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	result = libcdirectory_directory_free(
 	          &directory,
-	          NULL );
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
 
 	return( 1 );
 
