@@ -1273,7 +1273,7 @@ int libcdirectory_directory_read_entry(
 		return( -1 );
 	}
 #if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
-	if( internal_directory->path != NULL )
+	if( internal_directory->path == NULL )
 	{
 		libcerror_error_set(
 		 error,
@@ -1333,7 +1333,7 @@ int libcdirectory_directory_read_entry(
 		 "%s: unable to read from directory.",
 		 function );
 
-		return( -1 );
+		goto on_error;
 	}
 	if( result_directory_entry == NULL )
 	{
@@ -1359,78 +1359,93 @@ int libcdirectory_directory_read_entry(
 	directory_entry_name_length = narrow_string_length(
 	                               (char *) internal_directory_entry->entry.d_name );
 
-	system_directory_entry_path_size = internal_directory->path_size + directory_entry_name_length + 1;
-
-	system_directory_entry_path = system_string_allocate(
-	                               system_directory_entry_path_size );
-
-	if( system_directory_entry_path == NULL )
+	if( ( directory_entry_name_length == 1 )
+	 && ( internal_directory_entry->entry.d_name[ 0 ] == '.' ) )
 	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
-		 "%s: unable to create system character directory entry path.",
-		 function );
-
-		goto on_error;
+		file_statistics.st_mode = S_IFDIR;
 	}
-	if( system_string_copy(
-	     system_directory_entry_path,
-	     internal_directory->path,
-	     internal_directory->path_size ) == NULL )
+	else if( ( directory_entry_name_length == 2 )
+	      && ( internal_directory_entry->entry.d_name[ 0 ] == '.' )
+	      && ( internal_directory_entry->entry.d_name[ 1 ] == '.' ) )
 	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory path to system character directory path.",
-		 function );
-
-		goto on_error;
+		file_statistics.st_mode = S_IFDIR;
 	}
-	system_directory_entry_path_index = internal_directory->path_size - 1;
-
-	system_directory_entry_path[ system_directory_entry_path_index++ ] = (system_character_t) '/';
-
-	if( libcdirectory_system_string_copy_from_narrow_string(
-	     &( system_directory_entry_path[ system_directory_entry_path_index ] ),
-	     system_directory_entry_path_size - system_directory_entry_path_index,
-	     (char *) internal_directory_entry->entry.d_name,
-	     directory_entry_name_length,
-	     error ) != 1 )
+	else
 	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_MEMORY,
-		 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
-		 "%s: unable to copy directory entry name to system character directory path.",
-		 function );
+		system_directory_entry_path_size = internal_directory->path_size + directory_entry_name_length + 1;
 
-		goto on_error;
+		system_directory_entry_path = system_string_allocate(
+		                               system_directory_entry_path_size );
+
+		if( system_directory_entry_path == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+			 "%s: unable to create system character directory entry path.",
+			 function );
+
+			goto on_error;
+		}
+		if( system_string_copy(
+		     system_directory_entry_path,
+		     internal_directory->path,
+		     internal_directory->path_size - 1 ) == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+			 "%s: unable to copy directory path to system character directory path.",
+			 function );
+
+			goto on_error;
+		}
+		system_directory_entry_path_index = internal_directory->path_size - 1;
+
+		system_directory_entry_path[ system_directory_entry_path_index++ ] = (system_character_t) '/';
+
+		if( libcdirectory_system_string_copy_from_narrow_string(
+		     &( system_directory_entry_path[ system_directory_entry_path_index ] ),
+		     system_directory_entry_path_size - system_directory_entry_path_index,
+		     (char *) internal_directory_entry->entry.d_name,
+		     directory_entry_name_length + 1,
+		     error ) != 1 )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+			 "%s: unable to copy directory entry name to system character directory path.",
+			 function );
+
+			goto on_error;
+		}
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+		if( _wstat(
+		     system_directory_entry_path,
+		     &file_statistics ) != 0 )
+#else
+		if( stat(
+		     system_directory_entry_path,
+		     &file_statistics ) != 0 )
+#endif
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
+			 "%s: unable to retrieve directory entry file statistics.",
+			 function );
+
+			goto on_error;
+		}
+		memory_free(
+		 system_directory_entry_path );
+
+		system_directory_entry_path = NULL;
 	}
-	system_directory_entry_path_index += directory_entry_name_length;
-
-	system_directory_entry_path[ system_directory_entry_path_index ] = 0;
-
-	if( stat(
-	     system_directory_entry_path,
-	     &file_statistics ) != 0 )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_GET_FAILED,
-		 "%s: unable to retrieve directory entry file statistics.",
-		 function );
-
-		goto on_error;
-	}
-	memory_free(
-	 system_directory_entry_path );
-
-	system_directory_entry_path = NULL;
-
 	internal_directory_entry->st_mode = file_statistics.st_mode;
 
 #endif /* !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE ) */
@@ -1466,7 +1481,7 @@ int libcdirectory_directory_has_entry(
 {
 	libcdirectory_directory_entry_t *search_directory_entry = NULL;
 	char *search_directory_entry_name                       = NULL;
-	static char *function                                   = "libcdirectory_directory_read_entry";
+	static char *function                                   = "libcdirectory_directory_has_entry";
 	size_t search_directory_entry_name_length               = 0;
 	uint8_t search_directory_entry_type                     = 0;
 	int entry_found                                         = 0;
@@ -1719,7 +1734,7 @@ int libcdirectory_directory_has_entry_wide(
 {
 	libcdirectory_directory_entry_t *search_directory_entry = NULL;
 	wchar_t *search_directory_entry_name                    = NULL;
-	static char *function                                   = "libcdirectory_directory_read_entry_wide";
+	static char *function                                   = "libcdirectory_directory_has_entry_wide";
 	size_t search_directory_entry_name_length               = 0;
 	uint8_t search_directory_entry_type                     = 0;
 	int entry_found                                         = 0;

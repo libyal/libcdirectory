@@ -233,16 +233,100 @@ int libcdirectory_directory_entry_copy(
 		 "%s: unable to copy directory entry data.",
 		 function );
 
-		return( -1 );
+		goto on_error;
 	}
 #if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
-        /* TODO copy narrow_name */
-#else
-        /* TODO copy wide_name */
+	if( internal_source_directory_entry->narrow_name != NULL )
+	{
+		internal_destination_directory_entry->narrow_name = narrow_string_allocate(
+		                                                     internal_source_directory_entry->name_size );
 
+		if( internal_destination_directory_entry->narrow_name == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+			 "%s: unable to create destination narrow name.",
+			 function );
+
+			goto on_error;
+		}
+		if( narrow_string_copy(
+		     internal_destination_directory_entry->narrow_name,
+		     internal_source_directory_entry->narrow_name,
+		     internal_source_directory_entry->name_size ) == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+			 "%s: unable to copy source narrow name to destination.",
+			 function );
+
+			goto on_error;
+		}
+		internal_destination_directory_entry->name_size = internal_source_directory_entry->name_size;
+	}
+#else
+	if( internal_source_directory_entry->wide_name != NULL )
+	{
+		internal_destination_directory_entry->wide_name = wide_string_allocate(
+		                                                   internal_source_directory_entry->name_size );
+
+		if( internal_destination_directory_entry->wide_name == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_INSUFFICIENT,
+			 "%s: unable to create destination wide name.",
+			 function );
+
+			goto on_error;
+		}
+		if( wide_string_copy(
+		     internal_destination_directory_entry->wide_name,
+		     internal_source_directory_entry->wide_name,
+		     internal_source_directory_entry->name_size ) == NULL )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_MEMORY,
+			 LIBCERROR_MEMORY_ERROR_COPY_FAILED,
+			 "%s: unable to copy source wide name to destination.",
+			 function );
+
+			goto on_error;
+		}
+		internal_destination_directory_entry->name_size = internal_source_directory_entry->name_size;
+	}
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
+#if defined( HAVE_DIRENT_H ) && !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	internal_destination_directory_entry->st_mode = internal_source_directory_entry->st_mode;
+#endif
 	return( 1 );
+
+on_error:
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	if( internal_destination_directory_entry->narrow_name != NULL )
+	{
+		memory_free(
+		 internal_destination_directory_entry->narrow_name );
+
+		internal_destination_directory_entry->narrow_name = NULL;
+	}
+#else
+	if( internal_destination_directory_entry->wide_name != NULL )
+	{
+		memory_free(
+		 internal_destination_directory_entry->wide_name );
+
+		internal_destination_directory_entry->wide_name = NULL;
+	}
+#endif
+	return( -1 );
 }
 
 #if defined( WINAPI ) && ( WINVER >= 0x0400 )
@@ -386,13 +470,14 @@ int libcdirectory_directory_entry_get_type(
 			 error,
 			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
 			 LIBCERROR_RUNTIME_ERROR_UNSUPPORTED_VALUE,
-			 "%s: unsupported type.",
-			 function );
+			 "%s: unsupported type: 0x%04x.",
+			 function,
+			 internal_directory_entry->entry.d_type );
 
 			return( -1 );
 	}
 #else
-	switch( internal_directory_entry->st_mode )
+	switch( internal_directory_entry->st_mode & S_IFMT )
 	{
 		case S_IFBLK:
 		case S_IFCHR:

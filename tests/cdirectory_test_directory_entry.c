@@ -432,20 +432,41 @@ int cdirectory_test_directory_entry_get_type(
 	int result                                       = 0;
 	uint8_t entry_type                               = 0;
 
+#if defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) || defined( WINAPI )
+	uint8_t compare_flags                            = LIBCDIRECTORY_COMPARE_FLAG_NO_CASE;
+#else
+	uint8_t compare_flags                            = 0;
+#endif
+
 	/* Initialize test
 	 */
 	result = libcdirectory_directory_initialize(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	result = libcdirectory_directory_has_entry(
 	          directory,
@@ -453,8 +474,13 @@ int cdirectory_test_directory_entry_get_type(
 	          "TestFile",
 	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
-	          0,
+	          compare_flags,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	/* Test retrieving the type of a directory entry
 	 */
@@ -558,20 +584,41 @@ int cdirectory_test_directory_entry_get_name(
 	char *entry_name                                 = NULL;
 	int result                                       = 0;
 
+#if defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) || defined( WINAPI )
+	uint8_t compare_flags                            = LIBCDIRECTORY_COMPARE_FLAG_NO_CASE;
+#else
+	uint8_t compare_flags                            = 0;
+#endif
+
 	/* Initialize test
 	 */
 	result = libcdirectory_directory_initialize(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	result = libcdirectory_directory_has_entry(
 	          directory,
@@ -579,8 +626,13 @@ int cdirectory_test_directory_entry_get_name(
 	          "TestFile",
 	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
-	          0,
+	          compare_flags,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	/* Test retrieving the name of a directory entry
 	 */
@@ -691,20 +743,41 @@ int cdirectory_test_directory_entry_get_name_wide(
 	wchar_t *entry_name                              = NULL;
 	int result                                       = 0;
 
+#if defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) || defined( WINAPI )
+	uint8_t compare_flags                            = LIBCDIRECTORY_COMPARE_FLAG_NO_CASE;
+#else
+	uint8_t compare_flags                            = 0;
+#endif
+
 	/* Initialize test
 	 */
 	result = libcdirectory_directory_initialize(
 	          &directory,
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_open(
 	          directory,
 	          ".",
 	          &error );
 
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	result = libcdirectory_directory_has_entry_wide(
 	          directory,
@@ -712,8 +785,13 @@ int cdirectory_test_directory_entry_get_name_wide(
 	          L"TestFile",
 	          8,
 	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
-	          0,
+	          compare_flags,
 	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	/* Test retrieving the name of a directory entry
 	 */

@@ -55,34 +55,26 @@ extern "C" {
 
 typedef struct libcdirectory_internal_directory_entry libcdirectory_internal_directory_entry_t;
 
-#if defined( WINAPI )
 struct libcdirectory_internal_directory_entry
 {
+#if defined( WINAPI )
 	WIN32_FIND_DATA find_data;
 
-#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	char *narrow_name;
-#else
-	wchar_t *wide_name;
-#endif
-};
-
 #elif defined( HAVE_DIRENT_H )
-struct libcdirectory_internal_directory_entry
-{
 	struct dirent entry;
 
-#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
-	char *narrow_name;
-#else
-	wchar_t *wide_name;
-#endif
 #if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
 	mode_t st_mode;
 #endif
-};
-
 #endif /* defined( WINAPI ) */
+
+#if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	char *narrow_name;
+#else
+	wchar_t *wide_name;
+#endif
+	size_t name_size;
+};
 
 LIBCDIRECTORY_EXTERN \
 int libcdirectory_directory_entry_initialize(
