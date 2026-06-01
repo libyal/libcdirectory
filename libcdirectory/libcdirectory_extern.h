@@ -24,6 +24,19 @@
 
 #include <common.h>
 
+#if !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute )
+#if __has_attribute( visibility )
+#define LIBCDIRECTORY_INTERNAL	__attribute__((visibility("hidden"))) extern
+
+#else
+#define LIBCDIRECTORY_INTERNAL	extern
+
+#endif /* __has_attribute( visibility ) */
+#else
+#define LIBCDIRECTORY_INTERNAL	extern
+
+#endif /* !defined( __CYGWIN__ ) && !defined( _WIN32 ) && defined( __has_attribute ) */
+
 /* Define HAVE_LOCAL_LIBCDIRECTORY for local use of libcdirectory
  */
 #if !defined( HAVE_LOCAL_LIBCDIRECTORY )
@@ -32,7 +45,7 @@
 
 #else
 #define LIBCDIRECTORY_EXTERN		/* extern */
-#define LIBCDIRECTORY_EXTERN_VARIABLE	extern
+#define LIBCDIRECTORY_EXTERN_VARIABLE	LIBCDIRECTORY_INTERNAL
 
 #endif /* !defined( HAVE_LOCAL_LIBCDIRECTORY ) */
 
