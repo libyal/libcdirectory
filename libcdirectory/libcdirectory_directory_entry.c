@@ -163,7 +163,7 @@ int libcdirectory_directory_entry_free(
 			memory_free(
 			 internal_directory_entry->wide_name );
 		}
-#endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
+#endif
 		memory_free(
 		 internal_directory_entry );
 	}
@@ -238,6 +238,11 @@ int libcdirectory_directory_entry_copy(
 #if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
 	if( internal_source_directory_entry->narrow_name != NULL )
 	{
+		if( internal_destination_directory_entry->narrow_name != NULL )
+		{
+			memory_free(
+			 internal_destination_directory_entry->narrow_name );
+		}
 		internal_destination_directory_entry->narrow_name = narrow_string_allocate(
 		                                                     internal_source_directory_entry->name_size );
 
@@ -271,6 +276,11 @@ int libcdirectory_directory_entry_copy(
 #else
 	if( internal_source_directory_entry->wide_name != NULL )
 	{
+		if( internal_destination_directory_entry->wide_name != NULL )
+		{
+			memory_free(
+			 internal_destination_directory_entry->wide_name );
+		}
 		internal_destination_directory_entry->wide_name = wide_string_allocate(
 		                                                   internal_source_directory_entry->name_size );
 
@@ -596,6 +606,11 @@ int libcdirectory_directory_entry_get_name(
 
 		goto on_error;
 	}
+	if( internal_directory_entry->narrow_name != NULL )
+	{
+		memory_free(
+		 internal_directory_entry->narrow_name );
+	}
 	internal_directory_entry->narrow_name = narrow_string_allocate(
 	                                         narrow_directory_name_size );
 
@@ -766,6 +781,11 @@ int libcdirectory_directory_entry_get_name_wide(
 
 		goto on_error;
 	}
+	if( internal_directory_entry->wide_name != NULL )
+	{
+		memory_free(
+		 internal_directory_entry->wide_name );
+	}
 	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );
 
@@ -875,6 +895,11 @@ int libcdirectory_directory_entry_get_name_wide(
 		 function );
 
 		goto on_error;
+	}
+	if( internal_directory_entry->wide_name != NULL )
+	{
+		memory_free(
+		 internal_directory_entry->wide_name );
 	}
 	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );

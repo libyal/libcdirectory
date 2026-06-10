@@ -161,7 +161,7 @@ int libcdirectory_directory_free(
 	if( *directory != NULL )
 	{
 		internal_directory = (libcdirectory_internal_directory_t *) *directory;
-	
+
 #if defined( WINAPI )
 		if( internal_directory->handle != INVALID_HANDLE_VALUE )
 #else
@@ -230,7 +230,7 @@ int libcdirectory_directory_open(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_name == NULL )
 	{
 		libcerror_error_set(
@@ -453,7 +453,7 @@ int libcdirectory_directory_open(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_name == NULL )
 	{
 		libcerror_error_set(
@@ -608,7 +608,7 @@ int libcdirectory_directory_open_wide(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_name == NULL )
 	{
 		libcerror_error_set(
@@ -828,7 +828,7 @@ int libcdirectory_directory_open_wide(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_name == NULL )
 	{
 		libcerror_error_set(
@@ -980,7 +980,7 @@ int libcdirectory_directory_close(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( internal_directory->handle != INVALID_HANDLE_VALUE )
 	{
 		if( FindClose(
@@ -1050,7 +1050,7 @@ int libcdirectory_directory_close(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( internal_directory->stream != NULL )
 	{
 		if( closedir(
@@ -1103,7 +1103,7 @@ int libcdirectory_directory_read_entry(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_entry == NULL )
 	{
 		libcerror_error_set(
@@ -1247,7 +1247,7 @@ int libcdirectory_directory_read_entry(
 		return( -1 );
 	}
 	internal_directory = (libcdirectory_internal_directory_t *) directory;
-	
+
 	if( directory_entry == NULL )
 	{
 		libcerror_error_set(
