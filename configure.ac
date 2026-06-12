@@ -2,7 +2,7 @@ AC_PREREQ([2.71])
 
 AC_INIT(
   [libcdirectory],
-  [20260610],
+  [20260612],
   [https://github.com/libyal/libcdirectory/issues])
 
 AC_CONFIG_SRCDIR(

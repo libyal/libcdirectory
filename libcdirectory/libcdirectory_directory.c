@@ -476,19 +476,6 @@ int libcdirectory_directory_open(
 
 		return( -1 );
 	}
-#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
-	if( internal_directory->path != NULL )
-	{
-		libcerror_error_set(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
-		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
-		 "%s: invalid directory - path value already set.",
-		 function );
-
-		goto on_error;
-	}
-#endif
 	internal_directory->stream = opendir(
 	                              directory_name );
 
@@ -552,6 +539,11 @@ int libcdirectory_directory_open(
 		 function );
 
 		goto on_error;
+	}
+	if( internal_directory->path != NULL )
+	{
+		memory_free(
+		 internal_directory->path );
 	}
 	internal_directory->path      = system_directory_name;
 	internal_directory->path_size = system_directory_name_size;

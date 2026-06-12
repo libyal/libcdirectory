@@ -138,7 +138,6 @@ stamp-h[1-9]
 /tests/cdirectory_test_error
 /tests/cdirectory_test_support
 /tests/cdirectory_test_system_string
-/tests/notify_stream.log
 /tests/package.m4
 /tests/test_library
 /tests/test_manpages

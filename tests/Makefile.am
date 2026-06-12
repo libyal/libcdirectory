@@ -114,7 +114,7 @@ package.m4: $(top_srcdir)/configure.ac
 
 test_library: package.m4 test_library.at test_macros.at
 
-test_manpages: package.m4 test_macros.at test_manpages.at
+test_manpages: package.m4 test_manpages.at
 
 EXTRA_DIST = \
 	$(check_AUTOTESTS:=.at) \
@@ -125,7 +125,6 @@ CLEANFILES = \
 	$(check_AUTOTESTS) \
 	*.exe \
 	*.tmp \
-	notify_stream.log \
 	TestFile
 
 DISTCLEANFILES = \
