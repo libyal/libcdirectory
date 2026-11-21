@@ -236,13 +236,16 @@ int libcdirectory_directory_entry_copy(
 		goto on_error;
 	}
 #if defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	if( internal_destination_directory_entry->narrow_name != NULL )
+	{
+		memory_free(
+		 internal_destination_directory_entry->narrow_name );
+
+		internal_destination_directory_entry->narrow_name = NULL;
+	}
+	internal_destination_directory_entry->name_size = 0;
 	if( internal_source_directory_entry->narrow_name != NULL )
 	{
-		if( internal_destination_directory_entry->narrow_name != NULL )
-		{
-			memory_free(
-			 internal_destination_directory_entry->narrow_name );
-		}
 		internal_destination_directory_entry->narrow_name = narrow_string_allocate(
 		                                                     internal_source_directory_entry->name_size );
 
@@ -274,13 +277,16 @@ int libcdirectory_directory_entry_copy(
 		internal_destination_directory_entry->name_size = internal_source_directory_entry->name_size;
 	}
 #else
+	if( internal_destination_directory_entry->wide_name != NULL )
+	{
+		memory_free(
+		 internal_destination_directory_entry->wide_name );
+
+		internal_destination_directory_entry->wide_name = NULL;
+	}
+	internal_destination_directory_entry->name_size = 0;
 	if( internal_source_directory_entry->wide_name != NULL )
 	{
-		if( internal_destination_directory_entry->wide_name != NULL )
-		{
-			memory_free(
-			 internal_destination_directory_entry->wide_name );
-		}
 		internal_destination_directory_entry->wide_name = wide_string_allocate(
 		                                                   internal_source_directory_entry->name_size );
 
@@ -336,6 +342,7 @@ on_error:
 		internal_destination_directory_entry->wide_name = NULL;
 	}
 #endif
+	internal_destination_directory_entry->name_size = 0;
 	return( -1 );
 }
 
@@ -610,7 +617,10 @@ int libcdirectory_directory_entry_get_name(
 	{
 		memory_free(
 		 internal_directory_entry->narrow_name );
+
+		internal_directory_entry->narrow_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	internal_directory_entry->narrow_name = narrow_string_allocate(
 	                                         narrow_directory_name_size );
 
@@ -642,6 +652,8 @@ int libcdirectory_directory_entry_get_name(
 		goto on_error;
 	}
 	*name = internal_directory_entry->narrow_name;
+
+	internal_directory_entry->name_size = narrow_directory_name_size;
 #else
 	*name = internal_directory_entry->find_data.cFileName;
 #endif
@@ -656,6 +668,7 @@ on_error:
 
 		internal_directory_entry->narrow_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	return( -1 );
 #endif
 }
@@ -785,7 +798,10 @@ int libcdirectory_directory_entry_get_name_wide(
 	{
 		memory_free(
 		 internal_directory_entry->wide_name );
+
+		internal_directory_entry->wide_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );
 
@@ -817,7 +833,10 @@ int libcdirectory_directory_entry_get_name_wide(
 		goto on_error;
 	}
 	*name = internal_directory_entry->wide_name;
+
+	internal_directory_entry->name_size = wide_directory_name_size;
 #endif
+
 	return( 1 );
 
 #if !defined( HAVE_WIDE_SYSTEM_CHARACTER )
@@ -829,6 +848,7 @@ on_error:
 
 		internal_directory_entry->wide_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	return( -1 );
 #endif
 }
@@ -900,7 +920,10 @@ int libcdirectory_directory_entry_get_name_wide(
 	{
 		memory_free(
 		 internal_directory_entry->wide_name );
+
+		internal_directory_entry->wide_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	internal_directory_entry->wide_name = wide_string_allocate(
 	                                       wide_directory_name_size );
 
@@ -933,6 +956,8 @@ int libcdirectory_directory_entry_get_name_wide(
 	}
 	*name = internal_directory_entry->wide_name;
 
+	internal_directory_entry->name_size = wide_directory_name_size;
+
 	return( 1 );
 
 on_error:
@@ -943,6 +968,7 @@ on_error:
 
 		internal_directory_entry->wide_name = NULL;
 	}
+	internal_directory_entry->name_size = 0;
 	return( -1 );
 }
 

@@ -27,6 +27,14 @@
 #include <stdlib.h>
 #endif
 
+#if !defined( WINAPI ) && !defined( _WIN32 )
+#include <errno.h>
+#include <string.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+#endif
+
 #include "cdirectory_test_libcdirectory.h"
 #include "cdirectory_test_libcerror.h"
 #include "cdirectory_test_macros.h"
@@ -830,6 +838,37 @@ int cdirectory_test_directory_read_entry(
 	 "error",
 	 error );
 
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
+
+	/* Test libcdirectory_directory_read_entry with memset failing
+	 */
+	cdirectory_test_memset_attempts_before_fail = 0;
+
+	result = libcdirectory_directory_read_entry(
+	          directory,
+	          directory_entry,
+	          &error );
+
+	if( cdirectory_test_memset_attempts_before_fail != -1 )
+	{
+		cdirectory_test_memset_attempts_before_fail = -1;
+	}
+	else
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 -1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+		 "error",
+		 error );
+
+		libcerror_error_free(
+		 &error );
+	}
+#endif /* defined( HAVE_CDIRECTORY_TEST_MEMORY ) */
+
 	/* Clean up
 	 */
 	result = libcdirectory_directory_close(
@@ -956,6 +995,523 @@ on_error:
 	}
 	return( 0 );
 }
+
+#if !defined( WINAPI ) && !defined( _WIN32 )
+
+/* Removes the entries and directory created for the symbolic links test
+ * Note the removal is best effort any errors are ignored
+ */
+static void cdirectory_test_directory_symlink_dir_cleanup(
+     void )
+{
+	unlink( "TestSubDir/FileLink" );
+	unlink( "TestSubDir/DireLink" );
+	unlink( "TestSubDir/DeadLink" );
+	unlink( "TestSubDir/RegularFile" );
+	rmdir( "TestSubDir/SubDir" );
+	rmdir( "TestSubDir" );
+}
+
+/* Tests the libcdirectory_directory_read_entry function
+ * with a directory containing regular files, subdirectories and symbolic links
+ * Returns 1 if successful or 0 if not
+ */
+int cdirectory_test_directory_read_entry_symlinks(
+     void )
+{
+	libcdirectory_directory_t *directory             = NULL;
+	libcdirectory_directory_entry_t *directory_entry = NULL;
+	libcerror_error_t *error                         = NULL;
+	FILE *file_stream                                = NULL;
+	char *entry_name                                 = NULL;
+	uint8_t entry_type                               = 0;
+	int number_of_entries                            = 0;
+	int result                                       = 0;
+	int seen_current_dir                             = 0;
+	int seen_parent_dir                              = 0;
+	int seen_regular_file                            = 0;
+	int seen_subdir                                  = 0;
+	int seen_file_link                               = 0;
+	int seen_dir_link                                = 0;
+	int seen_dangling_link                           = 0;
+	int created_file_link                            = 0;
+	int created_dir_link                             = 0;
+	int created_dangling_link                        = 0;
+
+#if defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) || defined( WINAPI )
+	uint8_t compare_flags                            = LIBCDIRECTORY_COMPARE_FLAG_NO_CASE;
+#else
+	uint8_t compare_flags                            = 0;
+#endif
+
+	/* Remove (if any) leftover test directory from a previous test run
+	 */
+	cdirectory_test_directory_symlink_dir_cleanup();
+
+	if( mkdir( "TestSubDir", 0777 ) != 0 )
+	{
+		fprintf( stdout, "Unable to create TestSubDir: %s\n", strerror( errno ) );
+		return( 0 );
+	}
+	file_stream = file_stream_open(
+	               "TestSubDir/RegularFile",
+	               FILE_STREAM_OPEN_WRITE );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "file_stream",
+	 file_stream );
+
+	result = file_stream_close(
+	          file_stream );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	file_stream = NULL;
+
+	/* Create a subdirectory in the test directory
+	 */
+	if( mkdir( "TestSubDir/SubDir", 0777 ) != 0 )
+	{
+		fprintf( stdout, "Unable to create TestSubDir/SubDir: %s\n", strerror( errno ) );
+		goto on_error;
+	}
+	/* Add symbolic links to the test directory
+	 * Note the corresponding checks are skipped if creating symbolic links is not supported
+	 */
+	created_file_link     = ( symlink( "RegularFile", "TestSubDir/FileLink" ) == 0 );
+	created_dir_link      = ( symlink( "SubDir", "TestSubDir/DireLink" ) == 0 );
+	created_dangling_link = ( symlink( "NonExistentFile42", "TestSubDir/DeadLink" ) == 0 );
+
+	if( !created_file_link || !created_dir_link || !created_dangling_link )
+	{
+		printf( "Note one or more symbolic links could not be created the corresponding checks are skipped\n" );
+	}
+
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          "TestSubDir",
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_entry_initialize(
+	          &directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Read all entries of the directory
+	 * Test reading until the end of the directory
+	 */
+	while( 1 )
+	{
+		result = libcdirectory_directory_read_entry(
+		          directory,
+		          directory_entry,
+		          &error );
+
+		if( result == 0 )
+		{
+			break;
+		}
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "error",
+		 error );
+
+		number_of_entries++;
+
+		result = libcdirectory_directory_entry_get_name(
+		          directory_entry,
+		          &entry_name,
+		          &error );
+
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "error",
+		 error );
+
+		if( strcmp( entry_name, "." ) == 0 )
+		{
+			seen_current_dir++;
+		}
+		else if( strcmp( entry_name, ".." ) == 0 )
+		{
+			seen_parent_dir++;
+		}
+		else if( strcmp( entry_name, "RegularFile" ) == 0 )
+		{
+			seen_regular_file++;
+
+			result = libcdirectory_directory_entry_get_type(
+			          directory_entry,
+			          &entry_type,
+			          &error );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 1 );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "entry_type",
+			 entry_type,
+			 LIBCDIRECTORY_ENTRY_TYPE_FILE );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "error",
+			 error );
+		}
+		else if( strcmp( entry_name, "SubDir" ) == 0 )
+		{
+			seen_subdir++;
+
+			result = libcdirectory_directory_entry_get_type(
+			          directory_entry,
+			          &entry_type,
+			          &error );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 1 );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "entry_type",
+			 entry_type,
+			 LIBCDIRECTORY_ENTRY_TYPE_DIRECTORY );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "error",
+			 error );
+		}
+		else if( strcmp( entry_name, "FileLink" ) == 0 )
+		{
+			seen_file_link++;
+
+			result = libcdirectory_directory_entry_get_type(
+			          directory_entry,
+			          &entry_type,
+			          &error );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 1 );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "entry_type",
+			 entry_type,
+			 LIBCDIRECTORY_ENTRY_TYPE_LINK );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "error",
+			 error );
+		}
+		else if( strcmp( entry_name, "DireLink" ) == 0 )
+		{
+			seen_dir_link++;
+
+			result = libcdirectory_directory_entry_get_type(
+			          directory_entry,
+			          &entry_type,
+			          &error );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 1 );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "entry_type",
+			 entry_type,
+			 LIBCDIRECTORY_ENTRY_TYPE_LINK );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "error",
+			 error );
+		}
+		else if( strcmp( entry_name, "DeadLink" ) == 0 )
+		{
+			seen_dangling_link++;
+
+			result = libcdirectory_directory_entry_get_type(
+			          directory_entry,
+			          &entry_type,
+			          &error );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "result",
+			 result,
+			 1 );
+
+			CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+			 "entry_type",
+			 entry_type,
+			 LIBCDIRECTORY_ENTRY_TYPE_LINK );
+
+			CDIRECTORY_TEST_ASSERT_IS_NULL(
+			 "error",
+			 error );
+		}
+	}
+	CDIRECTORY_TEST_ASSERT_GREATER_THAN_INT(
+	 "number_of_entries",
+	 number_of_entries,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "seen_current_dir",
+	 seen_current_dir,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "seen_parent_dir",
+	 seen_parent_dir,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "seen_regular_file",
+	 seen_regular_file,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "seen_subdir",
+	 seen_subdir,
+	 1 );
+
+	if( created_file_link )
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "seen_file_link",
+		 seen_file_link,
+		 1 );
+	}
+	if( created_dir_link )
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "seen_dir_link",
+		 seen_dir_link,
+		 1 );
+	}
+	if( created_dangling_link )
+	{
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "seen_dangling_link",
+		 seen_dangling_link,
+		 1 );
+	}
+	/* Test reading beyond the end of the directory
+	 */
+	result = libcdirectory_directory_read_entry(
+	          directory,
+	          directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Note the directory needs to be re-opened before it can be searched
+	 * has_entry starts searching at the current stream position
+	 */
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          "TestSubDir",
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test has entry of a symbolic link
+	 */
+	if( created_file_link )
+	{
+		result = libcdirectory_directory_has_entry(
+		          directory,
+		          directory_entry,
+		          "FileLink",
+		          8,
+		          LIBCDIRECTORY_ENTRY_TYPE_LINK,
+		          compare_flags,
+		          &error );
+
+		CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+		 "result",
+		 result,
+		 1 );
+
+		CDIRECTORY_TEST_ASSERT_IS_NULL(
+		 "error",
+		 error );
+	}
+	/* Test has entry non match
+	 * (RegularFile is a regular file and not a symbolic link)
+	 */
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "RegularFile",
+	          11,
+	          LIBCDIRECTORY_ENTRY_TYPE_LINK,
+	          compare_flags,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Clean up
+	 */
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_free(
+	          &directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	cdirectory_test_directory_symlink_dir_cleanup();
+
+	return( 1 );
+
+on_error:
+	if( error != NULL )
+	{
+		libcerror_error_free(
+		 &error );
+	}
+	if( directory_entry != NULL )
+	{
+		libcdirectory_directory_entry_free(
+		 &directory_entry,
+		 NULL );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
+		 NULL );
+	}
+	cdirectory_test_directory_symlink_dir_cleanup();
+	return( 0 );
+}
+
+#endif /* !defined( WINAPI ) && !defined( _WIN32 ) */
 
 /* Tests the libcdirectory_directory_has_entry function
  * Returns 1 if successful or 0 if not
@@ -1783,6 +2339,14 @@ int main(
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_read_entry",
 	 cdirectory_test_directory_read_entry );
+
+#if !defined( WINAPI ) && !defined( _WIN32 )
+
+	CDIRECTORY_TEST_RUN(
+	 "libcdirectory_directory_read_entry_symlinks",
+	 cdirectory_test_directory_read_entry_symlinks );
+
+#endif /* !defined( WINAPI ) && !defined( _WIN32 ) */
 
 	CDIRECTORY_TEST_RUN(
 	 "libcdirectory_directory_has_entry",

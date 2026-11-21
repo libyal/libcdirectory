@@ -30,6 +30,10 @@
 #include <errno.h>
 #endif
 
+#if !defined( WINAPI )
+#include <stddef.h>
+#endif
+
 #if defined( HAVE_SYS_STAT_H )
 #include <sys/stat.h>
 #endif
@@ -188,7 +192,8 @@ int libcdirectory_directory_free(
 			memory_free(
 			 internal_directory->path );
 
-			internal_directory->path = NULL;
+			internal_directory->path      = NULL;
+			internal_directory->path_size = 0;
 		}
 #endif
 		*directory = NULL;
@@ -217,6 +222,7 @@ int libcdirectory_directory_open(
 	size_t directory_name_length                                             = 0;
 	size_t system_directory_name_size                                        = 0;
 	DWORD error_code                                                         = 0;
+	DWORD file_attributes                                                    = 0;
 
 	if( directory == NULL )
 	{
@@ -347,6 +353,29 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
+	/* GetFileAttributes on a non-directory will be successful
+	 */
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	file_attributes = GetFileAttributesW(
+	                   (LPCWSTR) system_directory_name );
+#else
+	file_attributes = GetFileAttributesA(
+	                   (LPCSTR) system_directory_name );
+#endif
+	if( ( file_attributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
+	{
+		error_code = GetLastError();
+
+		libcerror_system_set_error(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_IO,
+		 LIBCERROR_IO_ERROR_OPEN_FAILED,
+		 error_code,
+		 "%s: unsupported file type - not a directory.",
+		 function );
+
+		goto on_error;
+	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
 	if( ( directory_name_length < 2 )
@@ -382,26 +411,19 @@ int libcdirectory_directory_open(
 
 		goto on_error;
 	}
-	/* Note that FindFirstFile on a non-directory will be successful
-	 */
-	if( ( internal_first_directory_entry->find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
-	{
-		libcerror_system_set_error(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_OPEN_FAILED,
-		 error_code,
-		 "%s: unsupported file type - not a directory.",
-		 function );
-
-		goto on_error;
-	}
 	memory_free(
 	 system_directory_name );
 
 	return( 1 );
 
 on_error:
+	if( internal_directory->handle != INVALID_HANDLE_VALUE )
+	{
+		FindClose(
+		 internal_directory->handle );
+
+		internal_directory->handle = INVALID_HANDLE_VALUE;
+	}
 	if( system_directory_name != NULL )
 	{
 		memory_free(
@@ -476,6 +498,19 @@ int libcdirectory_directory_open(
 
 		return( -1 );
 	}
+#if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( internal_directory->path != NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_ALREADY_SET,
+		 "%s: invalid directory - path value already set.",
+		 function );
+
+		return( -1 );
+	}
+#endif
 	internal_directory->stream = opendir(
 	                              directory_name );
 
@@ -553,6 +588,13 @@ int libcdirectory_directory_open(
 	return( 1 );
 
 on_error:
+	if( internal_directory->stream != NULL )
+	{
+		closedir(
+		 internal_directory->stream );
+
+		internal_directory->stream = NULL;
+	}
 #if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
 	if( system_directory_name != NULL )
 	{
@@ -587,6 +629,7 @@ int libcdirectory_directory_open_wide(
 	size_t directory_name_length                                             = 0;
 	size_t system_directory_name_size                                        = 0;
 	DWORD error_code                                                         = 0;
+	DWORD file_attributes                                                    = 0;
 
 	if( directory == NULL )
 	{
@@ -681,7 +724,7 @@ int libcdirectory_directory_open_wide(
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
 	if( ( directory_name_length < 2 )
-	 || ( directory_name[ directory_name_length - 1 ] == (wchar_t) '\\' ) )
+	 || ( directory_name[ directory_name_length - 1 ] != (wchar_t) '\\' ) )
 	{
 		system_directory_name_size += 1;
 	}
@@ -717,10 +760,33 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
+	/* GetFileAttributes on a non-directory will be successful
+	 */
+#if defined( HAVE_WIDE_SYSTEM_CHARACTER )
+	file_attributes = GetFileAttributesW(
+	                   (LPCWSTR) system_directory_name );
+#else
+	file_attributes = GetFileAttributesA(
+	                   (LPCSTR) system_directory_name );
+#endif
+	if( ( file_attributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
+	{
+		error_code = GetLastError();
+
+		libcerror_system_set_error(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_IO,
+		 LIBCERROR_IO_ERROR_OPEN_FAILED,
+		 error_code,
+		 "%s: unsupported file type - not a directory.",
+		 function );
+
+		goto on_error;
+	}
 	/* Find files requires a search path, add a \ and * if necessary
 	 */
 	if( ( directory_name_length < 2 )
-	 || ( directory_name[ directory_name_length - 1 ] == (wchar_t) '\\' ) )
+	 || ( directory_name[ directory_name_length - 1 ] != (wchar_t) '\\' ) )
 	{
 		system_directory_name[ system_directory_name_size - 3 ] = (system_character_t) '\\';
 	}
@@ -752,26 +818,19 @@ int libcdirectory_directory_open_wide(
 
 		goto on_error;
 	}
-	/* Note that FindFirstFile on a non-directory will be successful
-	 */
-	if( ( internal_first_directory_entry->find_data.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) == 0 )
-	{
-		libcerror_system_set_error(
-		 error,
-		 LIBCERROR_ERROR_DOMAIN_IO,
-		 LIBCERROR_IO_ERROR_OPEN_FAILED,
-		 error_code,
-		 "%s: unsupported file type - not a directory.",
-		 function );
-
-		goto on_error;
-	}
 	memory_free(
 	 system_directory_name );
 
 	return( 1 );
 
 on_error:
+	if( internal_directory->handle != INVALID_HANDLE_VALUE )
+	{
+		FindClose(
+		 internal_directory->handle );
+
+		internal_directory->handle = INVALID_HANDLE_VALUE;
+	}
 	if( system_directory_name != NULL )
 	{
 		memory_free(
@@ -931,6 +990,13 @@ int libcdirectory_directory_open_wide(
 	return( 1 );
 
 on_error:
+	if( internal_directory->stream != NULL )
+	{
+		closedir(
+		 internal_directory->stream );
+
+		internal_directory->stream = NULL;
+	}
 	if( system_directory_name != NULL )
 	{
 		memory_free(
@@ -1060,6 +1126,16 @@ int libcdirectory_directory_close(
 		}
 		internal_directory->stream = NULL;
 	}
+#if defined( HAVE_DIRENT_H ) && !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
+	if( internal_directory->path != NULL )
+	{
+		memory_free(
+		 internal_directory->path );
+
+		internal_directory->path      = NULL;
+		internal_directory->path_size = 0;
+	}
+#endif
 	return( result );
 }
 
@@ -1159,6 +1235,7 @@ int libcdirectory_directory_read_entry(
 			 internal_directory_entry->narrow_name );
 
 			internal_directory_entry->narrow_name = NULL;
+			internal_directory_entry->name_size   = 0;
 		}
 #else
 		if( internal_directory_entry->wide_name != NULL )
@@ -1167,6 +1244,7 @@ int libcdirectory_directory_read_entry(
 			 internal_directory_entry->wide_name );
 
 			internal_directory_entry->wide_name = NULL;
+			internal_directory_entry->name_size = 0;
 		}
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
@@ -1218,11 +1296,13 @@ int libcdirectory_directory_read_entry(
 	static char *function                                              = "libcdirectory_directory_read_entry";
 	int result                                                         = 0;
 
+	size_t directory_entry_name_length                                 = 0;
+	size_t directory_entry_record_size                                 = 0;
+
 #if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
 	struct stat file_statistics;
 
 	system_character_t *system_directory_entry_path                    = NULL;
-	size_t directory_entry_name_length                                 = 0;
 	size_t system_directory_entry_path_index                           = 0;
 	size_t system_directory_entry_path_size                            = 0;
 #endif
@@ -1284,6 +1364,7 @@ int libcdirectory_directory_read_entry(
 		 internal_directory_entry->narrow_name );
 
 		internal_directory_entry->narrow_name = NULL;
+		internal_directory_entry->name_size   = 0;
 	}
 #else
 	if( internal_directory_entry->wide_name != NULL )
@@ -1292,6 +1373,7 @@ int libcdirectory_directory_read_entry(
 		 internal_directory_entry->wide_name );
 
 		internal_directory_entry->wide_name = NULL;
+		internal_directory_entry->name_size = 0;
 	}
 #endif /* defined( HAVE_WIDE_CHARACTER_TYPE ) && defined( HAVE_WIDE_SYSTEM_CHARACTER ) */
 
@@ -1332,10 +1414,68 @@ int libcdirectory_directory_read_entry(
 		return( 0 );
 	}
 #if defined( HAVE_READDIR ) && ( !defined( HAVE_READDIR_R ) || defined( HAVE_DEPRECATED_READDIR_R ) )
+
+	/* Note the size of a directory entry record in the stream buffer can be smaller
+	 * or (due to alignment padding) larger than sizeof( struct dirent )
+	 */
+	directory_entry_name_length = narrow_string_length(
+	                               (char *) result_directory_entry->d_name );
+
+	if( directory_entry_name_length >= sizeof( internal_directory_entry->entry.d_name ) )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+		 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+		 "%s: unsupported directory entry record.",
+		 function );
+
+		goto on_error;
+	}
+	directory_entry_record_size = offsetof( struct dirent, d_name ) + directory_entry_name_length + 1;
+
+#if defined( HAVE_STRUCT_DIRENT_D_RECLEN )
+	/* Note that MinGW defines d_reclen as 0
+	 */
+	if( result_directory_entry->d_reclen != 0 )
+	{
+		if( (size_t) result_directory_entry->d_reclen < directory_entry_record_size )
+		{
+			libcerror_error_set(
+			 error,
+			 LIBCERROR_ERROR_DOMAIN_RUNTIME,
+			 LIBCERROR_RUNTIME_ERROR_VALUE_OUT_OF_BOUNDS,
+			 "%s: unsupported directory entry record.",
+			 function );
+
+			goto on_error;
+		}
+		directory_entry_record_size = result_directory_entry->d_reclen;
+	}
+#endif /* defined( HAVE_STRUCT_DIRENT_D_RECLEN ) */
+
+	if( directory_entry_record_size > sizeof( struct dirent ) )
+	{
+		directory_entry_record_size = sizeof( struct dirent );
+	}
+	if( memory_set(
+	     &( internal_directory_entry->entry ),
+	     0,
+	     sizeof( struct dirent ) ) == NULL )
+	{
+		libcerror_error_set(
+		 error,
+		 LIBCERROR_ERROR_DOMAIN_MEMORY,
+		 LIBCERROR_MEMORY_ERROR_SET_FAILED,
+		 "%s: unable to clear directory entry.",
+		 function );
+
+		goto on_error;
+	}
 	if( memory_copy(
 	     &( internal_directory_entry->entry ),
 	     result_directory_entry,
-	     sizeof( struct dirent ) ) == NULL )
+	     directory_entry_record_size ) == NULL )
 	{
 		libcerror_error_set(
 		 error,
@@ -1346,7 +1486,8 @@ int libcdirectory_directory_read_entry(
 
 		goto on_error;
 	}
-#endif
+#endif /* defined( HAVE_READDIR ) && ( !defined( HAVE_READDIR_R ) || defined( HAVE_DEPRECATED_READDIR_R ) ) */
+
 #if !defined( LIBCDIRECTORY_HAVE_DIRENT_D_TYPE )
 	directory_entry_name_length = narrow_string_length(
 	                               (char *) internal_directory_entry->entry.d_name );
@@ -1416,6 +1557,13 @@ int libcdirectory_directory_read_entry(
 		}
 #if defined( HAVE_WIDE_SYSTEM_CHARACTER )
 		if( _wstat(
+		     system_directory_entry_path,
+		     &file_statistics ) != 0 )
+#elif defined( HAVE_LSTAT )
+		/* Note that lstat is used and not stat to prevent symbolic links from
+		 * being resolved and to allow the entry type to remain a symbolic link
+		 */
+		if( lstat(
 		     system_directory_entry_path,
 		     &file_statistics ) != 0 )
 #else

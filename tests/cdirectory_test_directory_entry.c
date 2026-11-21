@@ -286,13 +286,53 @@ on_error:
 int cdirectory_test_directory_entry_copy(
      void )
 {
+	libcdirectory_directory_t *directory                         = NULL;
 	libcdirectory_directory_entry_t *destination_directory_entry = NULL;
 	libcdirectory_directory_entry_t *directory_entry             = NULL;
 	libcerror_error_t *error                                     = NULL;
+	char *entry_name                                             = NULL;
+	uint8_t entry_type                                           = 0;
 	int result                                                   = 0;
+
+#if defined( HAVE_CASE_INSENSITIVE_FILE_SYSTEM ) || defined( WINAPI )
+	uint8_t compare_flags                                        = LIBCDIRECTORY_COMPARE_FLAG_NO_CASE;
+#else
+	uint8_t compare_flags                                        = 0;
+#endif
 
 	/* Initialize test
 	 */
+	result = libcdirectory_directory_initialize(
+	          &directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "directory",
+	 directory );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_open(
+	          directory,
+	          ".",
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
 	result = libcdirectory_directory_entry_initialize(
 	          &directory_entry,
 	          &error );
@@ -305,6 +345,24 @@ int cdirectory_test_directory_entry_copy(
 	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
 	 "directory_entry",
 	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_has_entry(
+	          directory,
+	          directory_entry,
+	          "TestFile",
+	          8,
+	          LIBCDIRECTORY_ENTRY_TYPE_FILE,
+	          compare_flags,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
 
 	CDIRECTORY_TEST_ASSERT_IS_NULL(
 	 "error",
@@ -343,46 +401,92 @@ int cdirectory_test_directory_entry_copy(
 	 "error",
 	 error );
 
-	/* Test error cases
+	/* Test retrieving the name of the copied entry
+	 */
+	result = libcdirectory_directory_entry_get_name(
+	          destination_directory_entry,
+	          &entry_name,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = narrow_string_compare(
+	          entry_name,
+	          "TestFile",
+	          8 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	/* Test retrieving the type of the copied entry
+	 */
+	result = libcdirectory_directory_entry_get_type(
+	          destination_directory_entry,
+	          &entry_type,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "entry_type",
+	 entry_type,
+	 LIBCDIRECTORY_ENTRY_TYPE_FILE );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test directory entry copy that replaces an existing destination entry
 	 */
 	result = libcdirectory_directory_entry_copy(
-	          NULL,
+	          destination_directory_entry,
 	          directory_entry,
 	          &error );
 
 	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
-	 -1 );
+	 1 );
 
-	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
 	 "error",
 	 error );
 
-	libcerror_error_free(
-	 &error );
-
-	result = libcdirectory_directory_entry_copy(
+	result = libcdirectory_directory_entry_get_name(
 	          destination_directory_entry,
-	          NULL,
+	          &entry_name,
 	          &error );
 
 	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
 	 "result",
 	 result,
-	 -1 );
+	 1 );
 
-	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
-	 "error",
-	 error );
+	result = narrow_string_compare(
+	          entry_name,
+	          "TestFile",
+	          8 );
 
-	libcerror_error_free(
-	 &error );
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
 
-/* TODO: test fails on Linux ARM */
-#if defined( HAVE_CDIRECTORY_TEST_MEMORY ) && defined( DISABLED )
+#if defined( HAVE_CDIRECTORY_TEST_MEMORY )
 
-	/* Test libcdirectory_directory_entry_initialize with memcpy failing
+	/* Test libcdirectory_directory_entry_copy with memcpy failing
 	 */
 	cdirectory_test_memcpy_attempts_before_fail = 0;
 
@@ -414,6 +518,85 @@ int cdirectory_test_directory_entry_copy(
 	/* Clean up
 	 */
 	result = libcdirectory_directory_entry_free(
+	          &directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "directory_entry",
+	 directory_entry );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	/* Test retrieving the name of the copied entry
+	 * Note this should still work after the source entry is released
+	 * as the name is stored within the copy
+	 */
+	result = libcdirectory_directory_entry_get_name(
+	          destination_directory_entry,
+	          &entry_name,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 1 );
+
+	result = narrow_string_compare(
+	          entry_name,
+	          "TestFile",
+	          8 );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	/* Test error cases
+	 */
+	result = libcdirectory_directory_entry_copy(
+	          NULL,
+	          destination_directory_entry,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	result = libcdirectory_directory_entry_copy(
+	          destination_directory_entry,
+	          NULL,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 -1 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NOT_NULL(
+	 "error",
+	 error );
+
+	libcerror_error_free(
+	 &error );
+
+	/* Clean up
+	 */
+	result = libcdirectory_directory_entry_free(
 	          &destination_directory_entry,
 	          &error );
 
@@ -430,8 +613,21 @@ int cdirectory_test_directory_entry_copy(
 	 "error",
 	 error );
 
-	result = libcdirectory_directory_entry_free(
-	          &directory_entry,
+	result = libcdirectory_directory_close(
+	          directory,
+	          &error );
+
+	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
+	 "result",
+	 result,
+	 0 );
+
+	CDIRECTORY_TEST_ASSERT_IS_NULL(
+	 "error",
+	 error );
+
+	result = libcdirectory_directory_free(
+	          &directory,
 	          &error );
 
 	CDIRECTORY_TEST_ASSERT_EQUAL_INT(
@@ -440,8 +636,8 @@ int cdirectory_test_directory_entry_copy(
 	 1 );
 
 	CDIRECTORY_TEST_ASSERT_IS_NULL(
-	 "directory_entry",
-	 directory_entry );
+	 "directory",
+	 directory );
 
 	CDIRECTORY_TEST_ASSERT_IS_NULL(
 	 "error",
@@ -465,6 +661,12 @@ on_error:
 	{
 		libcdirectory_directory_entry_free(
 		 &directory_entry,
+		 NULL );
+	}
+	if( directory != NULL )
+	{
+		libcdirectory_directory_free(
+		 &directory,
 		 NULL );
 	}
 	return( 0 );

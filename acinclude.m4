@@ -1,6 +1,6 @@
 dnl Checks for required headers and functions
 dnl
-dnl Version: 20260530
+dnl Version: 20261121
 
 dnl Function to detect whether readdir_r is deprecated
 AC_DEFUN([AX_LIBCDIRECTORY_CHECK_DEPRECATED_READDIR_R],
@@ -46,7 +46,17 @@ AC_DEFUN([AX_LIBCDIRECTORY_CHECK_LOCAL],
     AC_CHECK_HEADERS([dirent.h errno.h sys/stat.h])
 
     dnl Directory functions used in libcdirectory/libcdirectory_directory.h
-    AC_CHECK_FUNCS([closedir opendir readdir readdir_r])
+    AC_CHECK_FUNCS([closedir lstat opendir readdir readdir_r])
+
+    AS_IF(
+      [test "x$ac_cv_header_dirent_h" = xyes],
+      [AC_CHECK_MEMBERS(
+        [struct dirent.d_reclen],
+        [],
+        [],
+        [[#include <sys/types.h>
+#include <dirent.h>]])
+      ])
 
     AS_IF(
       [test "x$ac_cv_func_closedir" != xyes],
